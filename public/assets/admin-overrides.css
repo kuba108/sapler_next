@@ -1,0 +1,452 @@
+/* jQuery-free admin overrides for the Next.js port. */
+
+/* Keep the sidebar logo and the main navbar on one baseline. Bootstrap's
+   `.nav-link.btn` margins previously made the right-hand bar 16px taller. */
+.admin .sidebar .logo,
+.admin .main-panel > .navbar {
+  box-sizing: border-box;
+  height: 60px;
+  min-height: 60px;
+}
+
+.admin .main-panel > .navbar > .container-fluid {
+  height: 49px;
+  align-items: center;
+}
+
+.admin .navbar .admin-logout-link {
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+}
+
+/* jQuery-free equivalent of the Rails text/select/textarea editor helpers. */
+.inline-editor {
+  position: relative;
+  display: flex;
+  min-height: 38px;
+  margin: -12px 0 -10px;
+}
+
+.inline-editor .editor-label {
+  display: inline-block;
+  flex: 0 0 auto;
+  padding-right: 40px;
+  font-size: 1rem;
+  line-height: 38px;
+  vertical-align: bottom;
+  transform: translate3d(0, 0, 0);
+  transform-origin: 0 0;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.inline-editor-show {
+  position: relative;
+  flex-grow: 1;
+  min-width: 0;
+  min-height: 38px;
+  overflow-wrap: anywhere;
+  font-size: 1rem;
+  line-height: 38px;
+}
+
+.inline-editor-show .btn-edit {
+  position: absolute;
+  top: 1px;
+  right: 0;
+  display: none;
+  height: 100%;
+}
+
+.inline-editor-show .btn-edit span {
+  font-size: 18px;
+}
+
+.inline-editor-show:hover .btn-edit,
+.inline-editor-show:focus-within .btn-edit {
+  display: block;
+}
+
+.inline-editor-edit {
+  display: none;
+  flex-grow: 1;
+  min-width: 0;
+  padding: 0;
+}
+
+.inline-editor-edit .form-group {
+  min-height: 38px;
+  margin-bottom: 0;
+}
+
+.inline-editor-edit .form-control {
+  padding: 8px;
+  font-size: 1rem;
+  background-color: rgba(252, 202, 67, 0.12);
+  border: 0;
+  border-radius: 0;
+}
+
+.inline-editor-actions .btn {
+  min-width: 42px;
+  border-radius: 0;
+}
+
+.inline-editor.edited .inline-editor-show {
+  display: none;
+}
+
+.inline-editor.edited .editor-label {
+  position: absolute;
+  z-index: 1;
+  color: #fcca43;
+  pointer-events: none;
+  transform: translate3d(0, -21px, 0) scale3d(0.7, 0.7, 1);
+}
+
+.inline-editor.edited .inline-editor-edit {
+  display: block;
+}
+
+.inline-textarea-editor {
+  flex-direction: column;
+  min-height: 38px;
+  margin: 0;
+}
+
+.inline-textarea-editor .editor-label {
+  display: none;
+}
+
+.inline-textarea-editor .inline-editor-show {
+  line-height: 26px;
+  white-space: pre-wrap;
+}
+
+.inline-textarea-editor.edited .editor-label {
+  display: block;
+  transform: none;
+}
+
+.inline-textarea-editor .edit-toolbar {
+  min-height: 38px;
+}
+
+.inline-textarea-editor .edit-toolbar .inline-editor-actions {
+  float: right;
+}
+
+.inline-textarea-editor textarea.form-control {
+  min-height: 240px;
+}
+
+/* Dropdowns are toggled by adding `.show` (see BootstrapBehaviors); force them
+   visible since we don't ship the Bootstrap dropdown animation JS. */
+.dropdown.show > .dropdown-menu,
+.dropdown.show .dropdown-menu,
+.dropdown-menu.show {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+  display: block !important;
+}
+
+/* Rails-compatible page composer. The original rules in admin.css are scoped
+   to body.admin-sections.index; the Next route uses its own local scope. */
+.page-composer-toolbar {
+  margin-bottom: 0;
+}
+
+.page-composer {
+  margin: 0;
+  padding: 0;
+}
+
+.page-composer .section {
+  margin: 16px 0;
+}
+
+.page-composer .section-header {
+  display: block;
+  position: relative;
+  bottom: -15px;
+  text-align: center;
+}
+
+.page-composer .section-header::after,
+.page-composer .section-body::after,
+.page-composer .widget-header::after,
+.page-composer .widget-footer::after {
+  display: block;
+  clear: both;
+  content: "";
+}
+
+.page-composer .section-body {
+  display: block;
+  min-height: 72px;
+  padding: 15px;
+  background-color: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.page-composer .section-btn {
+  padding: 4px;
+  color: #000;
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+
+.page-composer .section-btn:hover {
+  color: #3472f7;
+}
+
+.page-composer .section-btn.remove-btn:hover {
+  color: #ff4a55;
+}
+
+.page-composer .wrapper-list,
+.page-composer .widget-wrapper {
+  min-height: 10px;
+}
+
+.page-composer .wrapper-card {
+  position: relative;
+  margin-bottom: 15px;
+  list-style: none;
+}
+
+.page-composer .wrapper-card:last-child {
+  margin-bottom: 0;
+}
+
+.page-composer .wrapper-column {
+  min-height: 62px;
+  padding: 10px;
+  list-style: none;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px #ececec;
+}
+
+.page-composer .wrapper-card > .drag-placeholder {
+  position: absolute;
+  top: 46%;
+  left: -12px;
+  padding: 1px;
+  color: #333;
+  cursor: move;
+  background-color: #fff;
+  border: 0;
+  border-radius: 5px 0 0 5px;
+}
+
+.page-composer .widget-editor {
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border: 1px dashed #73b1f1;
+}
+
+.page-composer .widget-editor .widget-header {
+  padding: 4px 14px;
+  cursor: move;
+}
+
+.page-composer .widget-editor .widget-header h4 {
+  float: left;
+  padding: 3px 0;
+  margin: 0;
+  color: #666;
+  font-size: 16px;
+}
+
+.page-composer .widget-editor .header-btn {
+  display: none;
+  width: 26px;
+  height: 32px;
+  padding: 0;
+  margin: 2px 0;
+  color: #73b1f1;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+}
+
+.page-composer .widget-editor:hover .widget-header,
+.page-composer .widget-editor.open .widget-header {
+  background-color: #f2f8ff;
+}
+
+.page-composer .widget-editor:hover .header-btn,
+.page-composer .widget-editor.open .header-btn {
+  display: inline-block;
+}
+
+.page-composer .widget-editor .widget-body,
+.page-composer .widget-editor .widget-footer {
+  display: none;
+  min-height: 40px;
+  padding: 8px;
+}
+
+.page-composer .widget-editor.open .widget-body,
+.page-composer .widget-editor.open .widget-footer {
+  display: block;
+}
+
+.page-composer .widget-editor.edited .widget-save-btn {
+  color: orange;
+}
+
+.page-composer .widget-editor .remove-widget-btn:hover {
+  color: #ff4a55;
+}
+
+.page-composer .widget-editor .widget-save-btn:hover {
+  color: #68b753;
+}
+
+.page-composer .dropdown-menu {
+  text-align: left;
+}
+
+.composer-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: block;
+  overflow: auto;
+  padding: 30px 15px;
+}
+
+.composer-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.composer-modal .modal-dialog {
+  position: relative;
+  z-index: 1;
+}
+
+/* Rails-compatible menu detail and editor. */
+.menu-builder .items-panel ul {
+  padding-left: 0;
+}
+
+.menu-builder .items-panel li {
+  padding: 6px 10px;
+  margin-bottom: 10px;
+  line-height: 22px;
+  list-style: none;
+  background-color: #fff;
+  border: 1px dashed #73b1f1;
+  border-radius: 5px;
+}
+
+.menu-builder .items-panel li::after {
+  display: block;
+  clear: both;
+  content: "";
+}
+
+.menu-builder .items-panel li em {
+  display: inline-block;
+  color: #888;
+}
+
+.menu-builder .items-panel .draggable {
+  display: none;
+}
+
+.menu-builder .items-panel ul.edit .draggable {
+  display: inline-block;
+  margin-right: 10px;
+  cursor: move;
+}
+
+.menu-builder .items-panel .sub-menu {
+  padding-left: 0;
+}
+
+.menu-builder .items-panel .sub-menu li {
+  border-color: #ccc;
+}
+
+.menu-builder .items-panel .sub-menu li:first-child {
+  margin-top: 10px;
+}
+
+.menu-builder .menu-item-actions {
+  float: right;
+  white-space: nowrap;
+}
+
+.menu-builder .btn-simple {
+  padding: 0 4px;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+.menu-builder .remove-link-btn {
+  color: #ff4a55;
+}
+
+.menu-editor-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: block;
+  overflow: auto;
+  padding: 30px 15px;
+}
+
+.menu-editor-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  cursor: default;
+  background: rgba(0, 0, 0, 0.5);
+  border: 0;
+}
+
+.menu-editor-modal .modal-dialog {
+  position: relative;
+  z-index: 1;
+}
+
+.menu-editor-modal .nav-tabs .nav-link {
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+}
+
+.menu-editor-modal .nav-tabs .nav-link.active {
+  background: #fff;
+  border-color: #dee2e6 #dee2e6 #fff;
+}
+
+/* Drag & drop feedback */
+.section-list .drop-target {
+  outline: 2px dashed #1d62f0;
+  outline-offset: 2px;
+  background: rgba(29, 98, 240, 0.05);
+}
+.section-list .drag-handle {
+  cursor: grab;
+}
+.section-list .drag-handle:active {
+  cursor: grabbing;
+}

@@ -1,0 +1,317 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model active_storage_attachments {
+  id          BigInt   @id @default(autoincrement())
+  name        String   @db.VarChar
+  record_type String   @db.VarChar
+  record_id   BigInt
+  blob_id     BigInt
+  created_at  DateTime @db.Timestamp(6)
+
+  @@unique([record_type, record_id, name, blob_id], map: "index_active_storage_attachments_uniqueness")
+  @@index([blob_id], map: "index_active_storage_attachments_on_blob_id")
+}
+
+model active_storage_blobs {
+  id                             BigInt                           @id @default(autoincrement())
+  key                            String                           @unique(map: "index_active_storage_blobs_on_key") @db.VarChar
+  filename                       String                           @db.VarChar
+  content_type                   String?                          @db.VarChar
+  metadata                       String?
+  byte_size                      BigInt
+  checksum                       String?                          @db.VarChar
+  created_at                     DateTime                         @db.Timestamp(6)
+  service_name                   String                           @default("amazon") @db.VarChar
+  active_storage_variant_records active_storage_variant_records[]
+}
+
+model active_storage_variant_records {
+  id                   BigInt               @id @default(autoincrement())
+  blob_id              BigInt
+  variation_digest     String               @db.VarChar
+  active_storage_blobs active_storage_blobs @relation(fields: [blob_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_993965df05")
+
+  @@unique([blob_id, variation_digest], map: "index_active_storage_variant_records_uniqueness")
+}
+
+model admin_users {
+  id                     BigInt      @id @default(autoincrement())
+  first_name             String?     @db.VarChar
+  last_name              String?     @db.VarChar
+  acl                    Json        @default("{}") @db.Json
+  deleted_at             DateTime?   @db.Timestamp(6)
+  created_at             DateTime    @db.Timestamp(6)
+  updated_at             DateTime    @db.Timestamp(6)
+  email                  String      @unique(map: "index_admin_users_on_email") @default("") @db.VarChar
+  encrypted_password     String      @default("") @db.VarChar
+  reset_password_token   String?     @unique(map: "index_admin_users_on_reset_password_token") @db.VarChar
+  reset_password_sent_at DateTime?   @db.Timestamp(6)
+  remember_created_at    DateTime?   @db.Timestamp(6)
+  sign_in_count          Int         @default(0)
+  current_sign_in_at     DateTime?   @db.Timestamp(6)
+  last_sign_in_at        DateTime?   @db.Timestamp(6)
+  current_sign_in_ip     String?     @db.Inet
+  last_sign_in_ip        String?     @db.Inet
+  galleries              galleries[]
+  pages                  pages[]
+
+  @@index([deleted_at], map: "index_admin_users_on_deleted_at")
+  @@index([first_name], map: "index_admin_users_on_first_name")
+  @@index([last_name], map: "index_admin_users_on_last_name")
+}
+
+model ar_internal_metadata {
+  key        String   @id @db.VarChar
+  value      String?  @db.VarChar
+  created_at DateTime @db.Timestamp(6)
+  updated_at DateTime @db.Timestamp(6)
+}
+
+model contact_rate_limits {
+  key_hash          String   @id @db.VarChar(64)
+  window_started_at DateTime @db.Timestamptz(6)
+  attempt_count     Int      @default(0)
+  created_at        DateTime @db.Timestamptz(6)
+  updated_at        DateTime @db.Timestamptz(6)
+
+  @@index([updated_at], map: "index_contact_rate_limits_on_updated_at")
+}
+
+model galleries {
+  id            BigInt      @id @default(autoincrement())
+  name          String      @db.VarChar
+  admin_user_id BigInt
+  description   String?     @db.VarChar
+  item_image    Int?
+  state         String      @default("visible") @db.VarChar
+  position      Int         @default(0)
+  created_at    DateTime    @db.Timestamp(6)
+  updated_at    DateTime    @db.Timestamp(6)
+  admin_users   admin_users @relation(fields: [admin_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_51988320f5")
+
+  @@index([admin_user_id], map: "index_galleries_on_admin_user_id")
+}
+
+model gallery_items {
+  id               BigInt   @id @default(autoincrement())
+  gallery_id       BigInt
+  label            String?  @db.VarChar
+  description      String?  @db.VarChar
+  position         Int      @default(0)
+  created_at       DateTime @db.Timestamp(6)
+  updated_at       DateTime @db.Timestamp(6)
+  label_i18n       Json?    @db.Json
+  description_i18n Json?    @db.Json
+
+  @@index([gallery_id], map: "index_gallery_items_on_gallery_id")
+}
+
+model media_asset_links {
+  id                                  BigInt       @id @default(autoincrement())
+  media_asset_id                      BigInt
+  source_active_storage_attachment_id BigInt?      @unique(map: "index_media_asset_links_on_source_attachment_id")
+  owner_type                          String       @db.VarChar(50)
+  owner_id                            BigInt
+  role                                String       @db.VarChar(50)
+  position                            Int          @default(0)
+  created_at                          DateTime     @db.Timestamptz(6)
+  updated_at                          DateTime     @db.Timestamptz(6)
+  media_assets                        media_assets @relation(fields: [media_asset_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([owner_type, owner_id, role, position], map: "index_media_asset_links_on_owner_role_position")
+}
+
+model media_assets {
+  id                            BigInt              @id @default(autoincrement())
+  source_active_storage_blob_id BigInt?             @unique(map: "index_media_assets_on_source_active_storage_blob_id")
+  storage_provider              String              @db.VarChar(30)
+  storage_key                   String              @db.VarChar(255)
+  filename                      String              @db.VarChar(255)
+  content_type                  String?             @db.VarChar(255)
+  byte_size                     BigInt
+  checksum                      String?             @db.VarChar(255)
+  metadata                      Json                @default("{}")
+  created_at                    DateTime            @db.Timestamptz(6)
+  updated_at                    DateTime            @db.Timestamptz(6)
+  media_asset_links             media_asset_links[]
+
+  @@unique([storage_provider, storage_key], map: "index_media_assets_on_provider_and_key")
+}
+
+model menu_items {
+  id         BigInt   @id @default(autoincrement())
+  parent     Int?
+  label      String   @db.VarChar(100)
+  url        String   @db.VarChar
+  position   Int      @default(0)
+  kind       String   @default("internal") @db.VarChar(50)
+  new_window Boolean  @default(false)
+  created_at DateTime @db.Timestamp(6)
+  updated_at DateTime @db.Timestamp(6)
+  menu_id    BigInt?
+  page_id    BigInt?
+  pages      pages?   @relation(fields: [page_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_7075222f77")
+  menus      menus?   @relation(fields: [menu_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_f8cf07e356")
+
+  @@index([menu_id], map: "index_menu_items_on_menu_id")
+  @@index([page_id], map: "index_menu_items_on_page_id")
+  @@index([parent], map: "index_menu_items_on_parent")
+}
+
+model menus {
+  id         BigInt       @id @default(autoincrement())
+  name       String       @db.VarChar
+  uuid       String?      @db.VarChar(36)
+  language   String       @db.VarChar
+  layout     String       @db.VarChar
+  content    String?
+  created_at DateTime     @db.Timestamp(6)
+  updated_at DateTime     @db.Timestamp(6)
+  menu_items menu_items[]
+
+  @@index([name], map: "index_menus_on_name")
+  @@index([uuid], map: "index_menus_on_uuid")
+}
+
+model pages {
+  id               BigInt       @id @default(autoincrement())
+  title            String       @db.VarChar
+  content          String?
+  uuid             String?      @db.VarChar(36)
+  admin_user_id    BigInt
+  meta_title       String?      @db.VarChar
+  meta_description String?      @db.VarChar
+  meta_keywords    String?      @db.VarChar
+  og_title         String?      @db.VarChar
+  og_description   String?      @db.VarChar
+  og_image         String?      @db.VarChar
+  layout           String       @db.VarChar
+  language         String       @db.VarChar
+  state            String       @default("hidden") @db.VarChar
+  publish_type     String       @default("public") @db.VarChar
+  revision_parent  Int?
+  revision         Int          @default(1)
+  revision_kind    String       @default("private") @db.VarChar(30)
+  published_at     DateTime?    @db.Timestamp(6)
+  created_at       DateTime     @db.Timestamp(6)
+  updated_at       DateTime     @db.Timestamp(6)
+  home_page        Boolean      @default(false)
+  menu_items       menu_items[]
+  admin_users      admin_users  @relation(fields: [admin_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_7ee14bf1fb")
+  sections         sections[]
+
+  @@index([admin_user_id], map: "index_pages_on_admin_user_id")
+  @@index([uuid], map: "index_pages_on_uuid")
+}
+
+model reviews {
+  id           BigInt   @id @default(autoincrement())
+  title        String   @db.VarChar
+  signature    String?  @db.VarChar
+  text         String?
+  date         String?  @db.VarChar
+  score        Int      @default(0)
+  is_approved  Boolean  @default(false)
+  is_important Boolean  @default(false)
+  created_at   DateTime @db.Timestamp(6)
+  updated_at   DateTime @db.Timestamp(6)
+}
+
+model routes {
+  id            BigInt   @id @default(autoincrement())
+  routable_id   Int?
+  routable_type String?  @db.VarChar
+  permalink     String   @db.VarChar
+  route_type    String   @default("standard") @db.VarChar
+  created_at    DateTime @db.Timestamp(6)
+  updated_at    DateTime @db.Timestamp(6)
+
+  @@index([permalink], map: "index_routes_on_permalink")
+  @@index([routable_id], map: "index_routes_on_routable_id")
+  @@index([routable_type], map: "index_routes_on_routable_type")
+  @@index([route_type], map: "index_routes_on_route_type")
+}
+
+model schema_migrations {
+  version String @id @db.VarChar
+}
+
+model sections {
+  id          BigInt     @id @default(autoincrement())
+  page_id     BigInt
+  name        String     @db.VarChar
+  description String?    @db.VarChar
+  position    Int        @default(1)
+  css_classes String[]   @default([]) @db.VarChar
+  created_at  DateTime   @db.Timestamp(6)
+  updated_at  DateTime   @db.Timestamp(6)
+  pages       pages      @relation(fields: [page_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_b9060f893a")
+  wrappers    wrappers[]
+
+  @@index([page_id], map: "index_sections_on_page_id")
+}
+
+model sequelize_meta {
+  name String @id @db.VarChar(255)
+}
+
+model settings {
+  id         BigInt   @id @default(autoincrement())
+  name       String   @db.VarChar
+  value      String   @db.VarChar
+  value_type String   @db.VarChar
+  created_at DateTime @db.Timestamp(6)
+  updated_at DateTime @db.Timestamp(6)
+}
+
+model widgets {
+  id              BigInt            @id @default(autoincrement())
+  name            String?           @db.VarChar
+  description     String?           @db.VarChar
+  global          Boolean           @default(false)
+  status          String?           @db.VarChar
+  json            String?
+  created_at      DateTime          @db.Timestamp(6)
+  updated_at      DateTime          @db.Timestamp(6)
+  wrapper_widgets wrapper_widgets[]
+
+  @@index([global], map: "index_widgets_on_global")
+  @@index([status], map: "index_widgets_on_status")
+}
+
+model wrapper_widgets {
+  id         BigInt   @id @default(autoincrement())
+  wrapper_id BigInt
+  widget_id  BigInt
+  position   Int      @default(1)
+  part       String   @db.VarChar
+  created_at DateTime @db.Timestamp(6)
+  updated_at DateTime @db.Timestamp(6)
+  wrappers   wrappers @relation(fields: [wrapper_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_779ffaf629")
+  widgets    widgets  @relation(fields: [widget_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_f5f2b22b8c")
+
+  @@index([widget_id], map: "index_wrapper_widgets_on_widget_id")
+  @@index([wrapper_id], map: "index_wrapper_widgets_on_wrapper_id")
+}
+
+model wrappers {
+  id              BigInt            @id @default(autoincrement())
+  section_id      BigInt
+  name            String            @db.VarChar
+  description     String?           @db.VarChar
+  position        Int               @default(1)
+  css_classes     String[]          @default([]) @db.VarChar
+  created_at      DateTime          @db.Timestamp(6)
+  updated_at      DateTime          @db.Timestamp(6)
+  wrapper_widgets wrapper_widgets[]
+  sections        sections          @relation(fields: [section_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_3cda7e4ed8")
+
+  @@index([section_id], map: "index_wrappers_on_section_id")
+}
