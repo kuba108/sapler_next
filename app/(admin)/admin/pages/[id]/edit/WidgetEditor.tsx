@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { WIDGET_LABELS } from '@/lib/widgets';
 import { mediaUrl } from '@/lib/media-url';
@@ -61,8 +60,8 @@ export default function WidgetEditor({
   const [saved, setSaved] = useState<null | boolean>(null);
   const [open, setOpen] = useState(false);
   const [edited, setEdited] = useState(false);
+  const [imageBlobId, setImageBlobId] = useState(widget.imageBlobId);
   const [pending, startTransition] = useTransition();
-  const router = useRouter();
   const jsonRef = useRef(json);
 
   function set(key: string, value: unknown) {
@@ -94,8 +93,8 @@ export default function WidgetEditor({
 
   function uploadImage(formData: FormData) {
     startTransition(async () => {
-      await uploadWidgetImage(widget.widgetId, formData);
-      router.refresh();
+      const result = await uploadWidgetImage(widget.widgetId, formData);
+      if (result.ok) setImageBlobId(result.blobId);
     });
   }
 
@@ -121,10 +120,11 @@ export default function WidgetEditor({
       >
         <h4>{WIDGET_LABELS[widget.name] ?? widget.name}</h4>
         <div className="pull-right">
-          <button className="widget-save-btn header-btn" onClick={save} disabled={pending} title="Uložit widget">
+          <button type="button" className="widget-save-btn header-btn" onClick={save} disabled={pending} title="Uložit widget">
             <span className={`fa ${saved === true ? 'fa-check' : 'fa-save'}`} />
           </button>
           <button
+            type="button"
             className="remove-widget-btn header-btn"
             onClick={() => onDelete(widget.wrapperWidgetId)}
             title="Odstranit widget"
@@ -189,9 +189,9 @@ export default function WidgetEditor({
 
         {widget.name === 'image' && (
           <>
-            {widget.imageBlobId && (
+            {imageBlobId && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={mediaUrl(widget.imageBlobId)} alt="" className="img-fluid mb-2" style={{ maxHeight: 160 }} />
+              <img src={mediaUrl(imageBlobId)} alt="" className="img-fluid mb-2" style={{ maxHeight: 160 }} />
             )}
             <Field label="Alt text">
               <input className="form-control" value={str('alt')} onChange={(e) => set('alt', e.target.value)} />

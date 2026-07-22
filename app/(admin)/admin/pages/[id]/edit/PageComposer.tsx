@@ -1,7 +1,6 @@
 'use client';
 
 import { Fragment, useEffect, useRef, useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
 import { SECTION_TYPES, WRAPPER_TYPES, WIDGET_TYPES, WRAPPER_PARTS } from '@/lib/widgets';
 import WidgetEditor, { type WidgetData } from './WidgetEditor';
 import {
@@ -98,7 +97,6 @@ export default function PageComposer({
   sections: SectionData[];
   galleries: { id: string; name: string }[];
 }) {
-  const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [publishMsg, setPublishMsg] = useState('');
   const [sections, setSections] = useState(initialSections);
@@ -129,10 +127,17 @@ export default function PageComposer({
     lastSig.current = signature(next);
   }
 
-  function run(fn: () => Promise<unknown>) {
+  function run<T>(fn: () => Promise<T>, applyResult: (result: T) => void) {
     startTransition(async () => {
-      await fn();
-      router.refresh();
+      applyResult(await fn());
+    });
+  }
+
+  function updateTree(update: (current: SectionData[]) => SectionData[]) {
+    setSections((current) => {
+      const next = update(current);
+      lastSig.current = signature(next);
+      return next;
     });
   }
 
@@ -141,7 +146,6 @@ export default function PageComposer({
       const res = await publishPage(pageId);
       setPublishMsg(res.msg);
       setTimeout(() => setPublishMsg(''), 3000);
-      router.refresh();
     });
   }
 
@@ -156,7 +160,7 @@ export default function PageComposer({
     if (d?.kind !== 'section') return;
     const next = moveSection(sections, d.id, targetSectionId);
     commit(next);
-    reorderSections(pageId, next.map((s) => s.id));
+    reorderSections(next.map((s) => s.id));
     setDrag(null);
     setDropTarget(null);
   }
@@ -218,7 +222,16 @@ export default function PageComposer({
                 </button>
                 <div className="dropdown-menu">
                   {SECTION_TYPES.map((s) => (
-                    <button key={s.name} className="dropdown-item" onClick={() => run(() => addSection(pageId, s.name))}>
+                    <button
+                      type="button"
+                      key={s.name}
+                      className="dropdown-item"
+                      onClick={() =>
+                        run(() => addSection(pageId, s.name), (result) => {
+                          updateTree((current) => [...current, result.section]);
+                        })
+                      }
+                    >
                       {s.label}
                     </button>
                   ))}
@@ -265,7 +278,22 @@ export default function PageComposer({
                   </button>
                   <div className="dropdown-menu">
                     {WRAPPER_TYPES.map((w) => (
-                      <button key={w.name} className="dropdown-item" onClick={() => run(() => addWrapper(section.id, w.name))}>
+                      <button
+                        type="button"
+                        key={w.name}
+                        className="dropdown-item"
+                        onClick={() =>
+                          run(() => addWrapper(section.id, w.name), (result) => {
+                            updateTree((current) =>
+                              current.map((item) =>
+                                item.id === section.id
+                                  ? { ...item, wrappers: [...item.wrappers, result.wrapper] }
+                                  : item,
+                              ),
+                            );
+                          })
+                        }
+                      >
                         Přidat {w.label.toLocaleLowerCase('cs')}
                       </button>
                     ))}
@@ -293,7 +321,11 @@ export default function PageComposer({
                 <button
                   className="section-btn remove-btn"
                   onClick={() => {
-                    if (confirm('Smazat sekci?')) run(() => deleteSection(section.id));
+                    if (confirm('Smazat sekci?')) {
+                      run(() => deleteSection(section.id), () => {
+                        updateTree((current) => current.filter((item) => item.id !== section.id));
+                      });
+                    }
                   }}
                   aria-label="Smazat sekci"
                 >
@@ -380,7 +412,24 @@ export default function PageComposer({
                                       <WidgetEditor
                                     widget={widget}
                                     galleries={galleries}
-                                    onDelete={(id) => run(() => deleteWrapperWidget(id))}
+                                    onDelete={(id) =>
+                                      run(() => deleteWrapperWidget(id), () => {
+                                        updateTree((current) =>
+                                          current.map((item) => ({
+                                            ...item,
+                                            wrappers: item.wrappers.map((candidate) => ({
+                                              ...candidate,
+                                              parts: Object.fromEntries(
+                                                Object.entries(candidate.parts).map(([partName, items]) => [
+                                                  partName,
+                                                  items.filter((entry) => entry.wrapperWidgetId !== id),
+                                                ]),
+                                              ),
+                                            })),
+                                          })),
+                                        );
+                                      })
+                                    }
                                     isDragging={draggingWidget?.id === widget.wrapperWidgetId}
                                     onDragStart={(height) => {
                                       setDraggingWidget({ id: widget.wrapperWidgetId, height });
@@ -436,7 +485,26 @@ export default function PageComposer({
                                       <button
                                         key={wt.name}
                                         className="dropdown-item"
-                                        onClick={() => run(() => addWidget(wrapper.id, wt.name, part))}
+                                        onClick={() =>
+                                          run(() => addWidget(wrapper.id, wt.name, part), (result) => {
+                                            updateTree((current) =>
+                                              current.map((item) => ({
+                                                ...item,
+                                                wrappers: item.wrappers.map((candidate) =>
+                                                  candidate.id === wrapper.id
+                                                    ? {
+                                                        ...candidate,
+                                                        parts: {
+                                                          ...candidate.parts,
+                                                          [part]: [...(candidate.parts[part] ?? []), result.widget],
+                                                        },
+                                                      }
+                                                    : candidate,
+                                                ),
+                                              })),
+                                            );
+                                          })
+                                        }
                                       >
                                         {wt.label}
                                       </button>
@@ -449,7 +517,16 @@ export default function PageComposer({
                                   <button
                                     className="btn btn-danger"
                                     onClick={() => {
-                                      if (confirm('Smazat sloupce?')) run(() => deleteWrapper(wrapper.id));
+                                      if (confirm('Smazat sloupce?')) {
+                                        run(() => deleteWrapper(wrapper.id), () => {
+                                          updateTree((current) =>
+                                            current.map((item) => ({
+                                              ...item,
+                                              wrappers: item.wrappers.filter((candidate) => candidate.id !== wrapper.id),
+                                            })),
+                                          );
+                                        });
+                                      }
                                     }}
                                   >
                                     Odstranit
@@ -493,7 +570,16 @@ export default function PageComposer({
                 pending={pending}
                 onClose={() => setSettingsSectionId(null)}
                 onSave={(cssClasses, description) => {
-                  run(() => updateSection(section.id, cssClasses.join(' '), description));
+                  run(
+                    () => updateSection(section.id, cssClasses.join(' '), description),
+                    () => {
+                      updateTree((current) =>
+                        current.map((item) =>
+                          item.id === section.id ? { ...item, cssClasses, description } : item,
+                        ),
+                      );
+                    },
+                  );
                   setSettingsSectionId(null);
                 }}
               />

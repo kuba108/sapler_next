@@ -39,7 +39,7 @@ export async function attachOne(
   recordId: bigint,
   name: string,
   file: File,
-): Promise<void> {
+): Promise<bigint> {
   const blob = await uploadBlob(file);
 
   const previous = await prisma.active_storage_attachments.findMany({
@@ -65,6 +65,8 @@ export async function attachOne(
       await s3Delete(oldBlob.key).catch(() => {});
     }
   }
+
+  return blob.id;
 }
 
 /** Appends a has_many_attached style attachment (keeps previous). */

@@ -251,7 +251,7 @@ export async function addSection(pageId: string, name: string) {
     where: { page_id: BigInt(pageId) },
     orderBy: { position: 'desc' },
   });
-  await prisma.sections.create({
+  const section = await prisma.sections.create({
     data: {
       page_id: BigInt(pageId),
       name,
@@ -261,8 +261,16 @@ export async function addSection(pageId: string, name: string) {
       updated_at: new Date(),
     },
   });
-  revalidatePath(`/admin/pages/${pageId}/edit`);
-  return { ok: true };
+  return {
+    ok: true,
+    section: {
+      id: section.id.toString(),
+      name: section.name,
+      description: section.description ?? '',
+      cssClasses: section.css_classes ?? [],
+      wrappers: [],
+    },
+  };
 }
 
 export async function updateSection(sectionId: string, cssClasses: string, description = '') {
@@ -295,7 +303,7 @@ export async function addWrapper(sectionId: string, name: string) {
     where: { section_id: BigInt(sectionId) },
     orderBy: { position: 'desc' },
   });
-  await prisma.wrappers.create({
+  const wrapper = await prisma.wrappers.create({
     data: {
       section_id: BigInt(sectionId),
       name,
@@ -305,7 +313,10 @@ export async function addWrapper(sectionId: string, name: string) {
       updated_at: new Date(),
     },
   });
-  return { ok: true };
+  return {
+    ok: true,
+    wrapper: { id: wrapper.id.toString(), name: wrapper.name, parts: {} },
+  };
 }
 
 export async function deleteWrapper(wrapperId: string) {
@@ -317,10 +328,11 @@ export async function deleteWrapper(wrapperId: string) {
 
 export async function addWidget(wrapperId: string, widgetName: string, part: string) {
   await requirePolicy('page', 'update');
+  const json = defaultWidgetJson(widgetName);
   const widget = await prisma.widgets.create({
     data: {
       name: widgetName,
-      json: JSON.stringify(defaultWidgetJson(widgetName)),
+      json: JSON.stringify(json),
       global: false,
       created_at: new Date(),
       updated_at: new Date(),
@@ -330,7 +342,7 @@ export async function addWidget(wrapperId: string, widgetName: string, part: str
     where: { wrapper_id: BigInt(wrapperId), part },
     orderBy: { position: 'desc' },
   });
-  await prisma.wrapper_widgets.create({
+  const wrapperWidget = await prisma.wrapper_widgets.create({
     data: {
       wrapper_id: BigInt(wrapperId),
       widget_id: widget.id,
@@ -340,7 +352,16 @@ export async function addWidget(wrapperId: string, widgetName: string, part: str
       updated_at: new Date(),
     },
   });
-  return { ok: true };
+  return {
+    ok: true,
+    widget: {
+      wrapperWidgetId: wrapperWidget.id.toString(),
+      widgetId: widget.id.toString(),
+      name: widget.name ?? '',
+      json,
+      imageBlobId: null,
+    },
+  };
 }
 
 export async function updateWidgetJson(widgetId: string, json: Record<string, unknown>) {
@@ -356,9 +377,10 @@ export async function uploadWidgetImage(widgetId: string, formData: FormData) {
   await requirePolicy('page', 'update');
   const image = formData.get('image');
   if (image instanceof File && image.size > 0) {
-    await attachOne('Widget', BigInt(widgetId), 'attachments', image);
+    const blobId = await attachOne('Widget', BigInt(widgetId), 'attachments', image);
+    return { ok: true, blobId: blobId.toString() };
   }
-  return { ok: true };
+  return { ok: false, blobId: null };
 }
 
 export async function deleteWrapperWidget(wrapperWidgetId: string) {
@@ -372,13 +394,12 @@ export async function deleteWrapperWidget(wrapperWidgetId: string) {
 }
 
 /** Reorders sections by id array (mirrors update_sections_order). */
-export async function reorderSections(pageId: string, ids: string[]) {
+export async function reorderSections(ids: string[]) {
   await requirePolicy('page', 'update');
   let pos = 1;
   for (const id of ids) {
     await prisma.sections.update({ where: { id: BigInt(id) }, data: { position: pos++ } });
   }
-  revalidatePath(`/admin/pages/${pageId}/edit`);
   return { ok: true };
 }
 
