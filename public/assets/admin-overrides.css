@@ -450,3 +450,498 @@
 .section-list .drag-handle:active {
   cursor: grabbing;
 }
+
+.page-composer .widget-editor.widget-dragging {
+  opacity: 0.3;
+  box-shadow: 0 8px 18px rgba(29, 98, 240, 0.16);
+}
+
+.page-composer .widget-drop-placeholder {
+  display: flex;
+  box-sizing: border-box;
+  min-height: 42px;
+  margin-bottom: 10px;
+  align-items: center;
+  justify-content: center;
+  color: #3472f7;
+  background: rgba(52, 114, 247, 0.07);
+  border: 2px dashed #73b1f1;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.65);
+  pointer-events: none;
+}
+
+.page-composer .widget-drop-placeholder span {
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Subtle visual refresh ----------------------------------------------------
+   Preserve the original Sapler / Light Bootstrap look. These rules only align
+   shared edges and make the existing components a little more consistent. */
+
+.admin {
+  --admin-canvas: #f5f6f8;
+  --admin-surface: #fff;
+  --admin-text: #333a43;
+  --admin-muted: #7f8791;
+  --admin-border: #e5e8ec;
+  --admin-blue: #1f77d0;
+  color: var(--admin-text);
+  background: var(--admin-canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+.admin .main-panel {
+  background: var(--admin-canvas);
+  overflow-x: hidden;
+}
+
+/* The navbar, breadcrumb and content now start on the same 30px axis. */
+.admin .main-panel > .navbar {
+  background: rgba(255, 255, 255, 0.98);
+  border-bottom-color: var(--admin-border);
+  box-shadow: 0 1px 3px rgba(35, 45, 58, 0.035);
+}
+
+.admin .main-panel > .navbar > .container-fluid {
+  display: flex;
+  width: 100%;
+}
+
+.admin .navbar .breadcrumbs {
+  margin-top: 9px;
+  margin-bottom: 9px;
+}
+
+.admin .navbar .breadcrumbs a.home {
+  display: inline-flex;
+  width: 32px;
+  margin: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.admin .navbar .breadcrumbs a.home:hover {
+  color: var(--admin-blue);
+  background: #f2f7fc;
+}
+
+.admin .content-breadcrumbs {
+  display: flex;
+  min-height: 56px;
+  padding: 0 30px !important;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.5);
+  border-bottom: 1px solid rgba(229, 232, 236, 0.8);
+}
+
+.admin .content-breadcrumbs .breadcrumb {
+  padding: 0;
+  font-size: 15px;
+}
+
+.admin .content-breadcrumbs .breadcrumb-item + .breadcrumb-item::before {
+  color: #adb3ba;
+}
+
+.admin .content-breadcrumbs .breadcrumb-item.active {
+  color: #707985;
+}
+
+.admin .main-panel > .content {
+  padding-top: 26px;
+  padding-bottom: 26px;
+}
+
+.admin .top-panel {
+  margin-bottom: 24px;
+}
+
+/* Cards keep their original proportions, with cleaner edges. */
+.admin .card {
+  overflow: hidden;
+  margin-bottom: 24px;
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 6px;
+  box-shadow: 0 2px 9px rgba(35, 45, 58, 0.055);
+}
+
+.admin .card .card-header {
+  padding: 17px 20px 13px;
+  background: var(--admin-surface);
+  border-bottom: 1px solid #eceef1 !important;
+}
+
+.admin .card .card-title {
+  color: var(--admin-text);
+  font-size: 21px;
+  line-height: 28px;
+}
+
+.admin .card .card-body {
+  padding: 16px 20px 18px;
+}
+
+.admin .card-row {
+  min-height: 48px;
+  margin: 0;
+  padding: 13px 4px;
+  border-top-color: #eceef1;
+}
+
+.admin .card-row:first-child {
+  border-top: 0;
+}
+
+.admin .card-row .card-label,
+.admin .inline-editor .editor-label {
+  min-width: 180px;
+  padding-right: 20px;
+  color: #555f6b;
+}
+
+.admin .card-row .card-label {
+  font-weight: 400;
+}
+
+/* Index tables genuinely fill the card; detail tables retain body padding. */
+.admin .card .card-body.table-full-width {
+  padding: 0;
+}
+
+.admin .card .table-full-width {
+  width: 100% !important;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+.admin .card .table {
+  margin-bottom: 0;
+}
+
+.admin .card .card-body:not(.table-full-width) > .table {
+  width: calc(100% + 40px);
+  margin-right: -20px;
+  margin-left: -20px;
+}
+
+.admin .card .table thead th {
+  padding-top: 12px;
+  padding-bottom: 10px;
+  color: #737c87;
+  background: #fafbfc;
+  border-top: 0;
+  border-bottom: 1px solid var(--admin-border);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.admin .card .table tbody td {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  vertical-align: middle;
+  border-top-color: #eceef1;
+}
+
+.admin .card .table tbody td:first-child,
+.admin .card .table thead th:first-child {
+  padding-left: 20px;
+}
+
+.admin .card .table tbody td:last-child,
+.admin .card .table thead th:last-child {
+  display: table-cell !important;
+  padding-right: 20px;
+}
+
+.admin table td.row-actions {
+  min-width: 50px;
+  white-space: nowrap;
+}
+
+.admin .table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(246, 247, 249, 0.72);
+}
+
+.admin .table-hover tbody tr:hover {
+  background-color: #f1f7fd;
+}
+
+/* Inputs and buttons use the same shapes without changing their color roles. */
+.admin .form-control,
+.admin .custom-select {
+  border-color: #dfe3e8;
+  border-radius: 5px;
+  box-shadow: inset 0 1px 1px rgba(35, 45, 58, 0.02);
+}
+
+.admin .form-control:focus,
+.admin .custom-select:focus {
+  border-color: #86add5;
+  box-shadow: 0 0 0 3px rgba(31, 119, 208, 0.1);
+}
+
+.admin .btn {
+  border-radius: 5px;
+  box-shadow: 0 1px 2px rgba(35, 45, 58, 0.07);
+}
+
+.admin .btn:hover,
+.admin .btn:focus {
+  box-shadow: 0 2px 5px rgba(35, 45, 58, 0.11);
+}
+
+.admin .btn-link,
+.admin .btn-simple {
+  box-shadow: none;
+}
+
+.admin .dropdown-menu {
+  border: 1px solid var(--admin-border);
+  box-shadow: 0 6px 18px rgba(35, 45, 58, 0.13);
+}
+
+.admin .modal-content {
+  overflow: hidden;
+  border: 0;
+  border-radius: 7px;
+  box-shadow: 0 16px 42px rgba(35, 45, 58, 0.2);
+}
+
+.admin .modal-header,
+.admin .modal-footer {
+  border-color: var(--admin-border);
+}
+
+/* Inline editing still works exactly like Rails, only aligns labels. */
+.admin .inline-editor {
+  align-items: center;
+}
+
+.admin .inline-editor .editor-label {
+  flex: 0 0 180px;
+}
+
+.admin .inline-editor:not(.edited):not(.inline-textarea-editor) {
+  height: 40px;
+  min-height: 40px;
+  margin: 0;
+}
+
+.admin .inline-editor:not(.edited):not(.inline-textarea-editor) .editor-label,
+.admin .inline-editor:not(.edited):not(.inline-textarea-editor) .inline-editor-show {
+  min-height: 20px;
+  line-height: 20px;
+}
+
+.admin .inline-editor-show .btn-edit {
+  top: 50%;
+  height: 36px;
+  border-radius: 4px;
+  transform: translateY(-50%);
+}
+
+.admin .card-row:has(> .inline-editor:not(.inline-textarea-editor)) {
+  height: 40px;
+  min-height: 40px;
+  padding: 0 4px;
+}
+
+.admin .inline-editor.edited:not(.inline-textarea-editor) {
+  height: 40px;
+  min-height: 40px;
+  margin: 0;
+  padding: 0;
+  align-items: stretch;
+}
+
+.admin .inline-editor.edited:not(.inline-textarea-editor) .editor-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: auto;
+  min-width: 0;
+  height: 20px;
+  padding: 0;
+  color: #e5a91b;
+  background: transparent;
+  font-size: 1rem;
+  line-height: 20px;
+  transform: translate3d(0, -14px, 0) scale3d(0.7, 0.7, 1);
+}
+
+.admin .inline-editor.edited:not(.inline-textarea-editor) .inline-editor-edit,
+.admin .inline-editor.edited:not(.inline-textarea-editor) .form-group,
+.admin .inline-editor.edited:not(.inline-textarea-editor) .input-group {
+  height: 40px;
+  min-height: 40px;
+}
+
+.admin .inline-editor-edit .form-control,
+.admin .inline-editor-edit .form-control:focus,
+.admin .inline-editor-edit .form-control:focus-visible {
+  background-color: rgba(252, 202, 67, 0.12);
+  border: 0;
+  border-radius: 0;
+  outline: 0 !important;
+  box-shadow: none;
+}
+
+.admin .inline-editor-actions .btn,
+.admin .inline-editor-actions .btn:hover,
+.admin .inline-editor-actions .btn:focus,
+.admin .inline-editor-actions .btn:focus-visible {
+  border-radius: 0;
+  outline: 0 !important;
+  box-shadow: none;
+}
+
+.admin .inline-editor.edited:not(.inline-textarea-editor) .form-control,
+.admin .inline-editor.edited:not(.inline-textarea-editor) .inline-editor-actions .btn {
+  height: 40px;
+  min-height: 40px;
+}
+
+.admin .inline-textarea-editor {
+  align-items: stretch;
+}
+
+.admin .inline-textarea-editor .editor-label {
+  min-width: 0;
+  flex-basis: auto;
+}
+
+/* Remove double spacing around grid items and make media edges predictable. */
+.admin .gallery-list {
+  gap: 18px;
+  padding: 20px !important;
+}
+
+.admin .gallery-item {
+  margin: 0;
+  border-radius: 5px;
+  box-shadow: 0 2px 7px rgba(35, 45, 58, 0.1);
+}
+
+.admin .gallery-item > img,
+.admin .gallery-item > .img-fluid {
+  width: 100%;
+  aspect-ratio: 5 / 3;
+  object-fit: cover;
+}
+
+.admin .menu-builder .items-panel li,
+.admin .page-composer .widget-editor,
+.admin .page-composer .wrapper-column,
+.admin .page-composer .section-body {
+  border-radius: 6px;
+}
+
+.admin .menu-builder .items-panel li {
+  box-shadow: 0 1px 3px rgba(35, 45, 58, 0.04);
+}
+
+.admin .page-composer .section-body {
+  border-color: #dfe3e8;
+  background: #f0f1f3;
+}
+
+.admin .page-composer .wrapper-column {
+  border: 1px solid #eceef1;
+  box-shadow: 0 1px 3px rgba(35, 45, 58, 0.05);
+}
+
+.admin .footer {
+  border-top-color: var(--admin-border);
+}
+
+.admin :where(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid rgba(31, 119, 208, 0.55) !important;
+  outline-offset: 2px;
+}
+
+@media (max-width: 1199px) {
+  .admin .gallery-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 991px) {
+  .admin .content-breadcrumbs {
+    padding-right: 24px !important;
+    padding-left: 24px !important;
+  }
+
+  .admin .gallery-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin .card .table-full-width.table-responsive {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .admin .content-breadcrumbs {
+    min-height: 52px;
+    padding-right: 15px !important;
+    padding-left: 15px !important;
+  }
+
+  .admin .main-panel > .content {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .admin .top-panel .float-left,
+  .admin .top-panel .float-right {
+    float: none !important;
+  }
+
+  .admin .top-panel .float-right {
+    margin-top: 10px;
+  }
+
+  .admin .inline-editor:not(.inline-textarea-editor) {
+    align-items: stretch;
+    flex-direction: column;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .admin .inline-editor .editor-label {
+    min-width: 0;
+    flex-basis: auto;
+    padding-right: 0;
+    color: var(--admin-muted);
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+  .admin .inline-editor.edited .editor-label {
+    position: relative;
+    transform: none;
+  }
+}
+
+@media (max-width: 575px) {
+  .admin .gallery-list {
+    grid-template-columns: 1fr;
+  }
+
+  .admin .card .card-header {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  .admin .card .card-body {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+}

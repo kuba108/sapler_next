@@ -6,7 +6,7 @@ import Navbar from '@/components/admin/Navbar';
 import BootstrapBehaviors from '@/components/admin/BootstrapBehaviors';
 
 export const metadata: Metadata = {
-  title: 'RubyQ',
+  title: 'Sapler Admin',
 };
 
 export const dynamic = 'force-dynamic';

@@ -21,10 +21,8 @@ export default function LoginForm() {
           <div className="col-md-4 col-sm-6 ml-auto mr-auto">
             <div className="head-bar">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/devise/ruby-logo-64-64.png" alt="RubyQ" />
-              <h1>
-                Ruby<em>Q</em> | admin
-              </h1>
+              <img src="/assets/template/logo@2x-sapler.png" alt="Sapler" />
+              <h1>| admin</h1>
             </div>
 
             <form action={formAction} className="form">

@@ -21,7 +21,7 @@ export default function Sidebar({ nav }: { nav: NavItem[] }) {
       <div className="sidebar-wrapper">
         <div className="logo">
           <Link href="/admin" className="simple-text">
-            RubyQ Admin
+            Sapler Admin
           </Link>
         </div>
         <ul className="nav">

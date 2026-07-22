@@ -11,11 +11,6 @@ export default function Navbar({
   return (
     <nav className="navbar navbar-expand-lg" color-on-scroll="500">
       <div className="container-fluid">
-        <div className="breadcrumbs">
-          <Link href="/admin" className="home">
-            <span className="fa fa-home" />
-          </Link>
-        </div>
         <div className="collapse navbar-collapse justify-content-end" id="navigation">
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">

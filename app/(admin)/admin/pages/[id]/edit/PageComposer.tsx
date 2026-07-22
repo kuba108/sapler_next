@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { Fragment, useEffect, useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { SECTION_TYPES, WRAPPER_TYPES, WIDGET_TYPES, WRAPPER_PARTS } from '@/lib/widgets';
 import WidgetEditor, { type WidgetData } from './WidgetEditor';
@@ -47,6 +47,22 @@ type Drag =
   | { kind: 'widget'; id: string }
   | null;
 
+function widgetTargetKey(wrapperId: string, part: string, beforeId: string | null) {
+  return `widget:${wrapperId}:${part}:${beforeId ?? 'end'}`;
+}
+
+function WidgetDropPlaceholder({ height }: { height: number }) {
+  return (
+    <div
+      className="widget-drop-placeholder"
+      style={{ height: `${Math.max(42, height)}px` }}
+      aria-hidden="true"
+    >
+      <span>Widget bude vložen sem</span>
+    </div>
+  );
+}
+
 function signature(sections: SectionData[]): string {
   return sections
     .map(
@@ -87,6 +103,7 @@ export default function PageComposer({
   const [publishMsg, setPublishMsg] = useState('');
   const [sections, setSections] = useState(initialSections);
   const [dropTarget, setDropTarget] = useState<string | null>(null);
+  const [draggingWidget, setDraggingWidget] = useState<{ id: string; height: number } | null>(null);
   const [settingsSectionId, setSettingsSectionId] = useState<string | null>(null);
 
   // Mirror the drag payload in a ref so drop handlers read the latest value
@@ -94,6 +111,7 @@ export default function PageComposer({
   const dragRef = useRef<Drag>(null);
   function setDrag(next: Drag) {
     dragRef.current = next;
+    if (next?.kind !== 'widget') setDraggingWidget(null);
   }
 
   // Resync when the server sends a new tree (after add/delete/refresh).
@@ -166,6 +184,11 @@ export default function PageComposer({
   ) {
     const d = dragRef.current;
     if (d?.kind !== 'widget') return;
+    if (d.id === targetWwId) {
+      setDrag(null);
+      setDropTarget(null);
+      return;
+    }
     const source = widgetSource(sections, d.id);
     const next = moveWidget(sections, d.id, targetWrapperId, targetPart, targetWwId);
     commit(next);
@@ -316,32 +339,53 @@ export default function PageComposer({
                       }}
                     >
                       <div className={parts.length > 1 ? 'row' : undefined}>
-                        {parts.map((part, partIndex) => (
-                          <div key={part} className={parts.length > 1 ? `col-md-${12 / parts.length}` : undefined}>
+                        {parts.map((part, partIndex) => {
+                          const widgets = wrapper.parts[part] ?? [];
+                          const endTarget = widgetTargetKey(wrapper.id, part, null);
+
+                          return (
+                            <div key={part} className={parts.length > 1 ? `col-md-${12 / parts.length}` : undefined}>
                             <div className={`${part} wrapper-column clearfix`}>
                               <div
-                                className={`widget-wrapper${dropTarget === `part:${wrapper.id}:${part}` ? ' drop-target' : ''}`}
+                                className="widget-wrapper"
                                 onDragOver={(e) => {
                                   if (dragRef.current?.kind === 'widget') {
                                     allowDrop(e);
                                     e.stopPropagation();
-                                    setDropTarget(`part:${wrapper.id}:${part}`);
+                                    if (e.target === e.currentTarget) setDropTarget(endTarget);
                                   }
                                 }}
                                 onDrop={(e) => {
                                   if (dragRef.current?.kind === 'widget') {
                                     e.stopPropagation();
-                                    onDropWidget(wrapper.id, part, null);
+                                    const prefix = `widget:${wrapper.id}:${part}:`;
+                                    const encodedTarget = dropTarget?.startsWith(prefix)
+                                      ? dropTarget.slice(prefix.length)
+                                      : 'end';
+                                    onDropWidget(
+                                      wrapper.id,
+                                      part,
+                                      encodedTarget === 'end' ? null : encodedTarget,
+                                    );
                                   }
                                 }}
                               >
-                                {(wrapper.parts[part] ?? []).map((widget) => (
-                                  <WidgetEditor
-                                    key={widget.wrapperWidgetId}
+                                {widgets.map((widget, widgetIndex) => {
+                                  const beforeTarget = widgetTargetKey(wrapper.id, part, widget.wrapperWidgetId);
+                                  return (
+                                    <Fragment key={widget.wrapperWidgetId}>
+                                      {dropTarget === beforeTarget && draggingWidget && (
+                                        <WidgetDropPlaceholder height={draggingWidget.height} />
+                                      )}
+                                      <WidgetEditor
                                     widget={widget}
                                     galleries={galleries}
                                     onDelete={(id) => run(() => deleteWrapperWidget(id))}
-                                    onDragStart={() => setDrag({ kind: 'widget', id: widget.wrapperWidgetId })}
+                                    isDragging={draggingWidget?.id === widget.wrapperWidgetId}
+                                    onDragStart={(height) => {
+                                      setDraggingWidget({ id: widget.wrapperWidgetId, height });
+                                      setDrag({ kind: 'widget', id: widget.wrapperWidgetId });
+                                    }}
                                     onDragEnd={() => {
                                       setDrag(null);
                                       setDropTarget(null);
@@ -350,16 +394,36 @@ export default function PageComposer({
                                       if (dragRef.current?.kind === 'widget') {
                                         allowDrop(e);
                                         e.stopPropagation();
+                                        const rect = e.currentTarget.getBoundingClientRect();
+                                        const beforeId = e.clientY < rect.top + rect.height / 2
+                                          ? widget.wrapperWidgetId
+                                          : widgets[widgetIndex + 1]?.wrapperWidgetId ?? null;
+                                        setDropTarget(
+                                          beforeId === dragRef.current.id
+                                            ? null
+                                            : widgetTargetKey(wrapper.id, part, beforeId),
+                                        );
                                       }
                                     }}
                                     onDrop={(e) => {
                                       if (dragRef.current?.kind === 'widget') {
                                         e.stopPropagation();
-                                        onDropWidget(wrapper.id, part, widget.wrapperWidgetId);
+                                        const rect = e.currentTarget.getBoundingClientRect();
+                                        const beforeId = e.clientY < rect.top + rect.height / 2
+                                          ? widget.wrapperWidgetId
+                                          : widgets[widgetIndex + 1]?.wrapperWidgetId ?? null;
+                                        if (beforeId !== dragRef.current.id) {
+                                          onDropWidget(wrapper.id, part, beforeId);
+                                        }
                                       }
                                     }}
-                                  />
-                                ))}
+                                      />
+                                    </Fragment>
+                                  );
+                                })}
+                                {dropTarget === endTarget && draggingWidget && (
+                                  <WidgetDropPlaceholder height={draggingWidget.height} />
+                                )}
                               </div>
 
                               <div className="pull-left">
@@ -393,8 +457,9 @@ export default function PageComposer({
                                 </div>
                               )}
                             </div>
-                          </div>
-                        ))}
+                            </div>
+                          );
+                        })}
                       </div>
                       <button
                         className="drag-placeholder"

@@ -10,7 +10,7 @@ export default async function DashboardPage() {
         <div className="row">
           <div className="col-md-12">
             <h4>Vítejte, {user.first_name || user.email}</h4>
-            <p>RubyQ administrace webu.</p>
+            <p>Sapler administrace webu.</p>
           </div>
         </div>
       </div>

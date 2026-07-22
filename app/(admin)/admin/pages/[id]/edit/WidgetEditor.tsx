@@ -46,14 +46,16 @@ export default function WidgetEditor({
   onDragEnd,
   onDragOver,
   onDrop,
+  isDragging,
 }: {
   widget: WidgetData;
   galleries: GalleryOption[];
   onDelete: (wrapperWidgetId: string) => void;
-  onDragStart: () => void;
+  onDragStart: (height: number) => void;
   onDragEnd: () => void;
   onDragOver: (event: React.DragEvent) => void;
   onDrop: (event: React.DragEvent) => void;
+  isDragging: boolean;
 }) {
   const [json, setJson] = useState<Record<string, unknown>>(widget.json);
   const [saved, setSaved] = useState<null | boolean>(null);
@@ -99,10 +101,12 @@ export default function WidgetEditor({
 
   return (
     <div
-      className={`widget widget-editor${open ? ' open' : ''}${edited ? ' edited' : ''}`}
+      className={`widget widget-editor${open ? ' open' : ''}${edited ? ' edited' : ''}${isDragging ? ' widget-dragging' : ''}`}
       onDragStart={(event) => {
         event.stopPropagation();
-        onDragStart();
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setDragImage(event.currentTarget, 24, 20);
+        onDragStart(event.currentTarget.getBoundingClientRect().height);
       }}
       onDragEnd={onDragEnd}
       onDragOver={onDragOver}
