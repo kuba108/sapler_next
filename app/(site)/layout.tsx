@@ -14,6 +14,7 @@ export default function SiteRootLayout({
   return (
     <html lang="cs">
       <head>
+        <link rel="icon" href="/assets/template/favicon.png" type="image/png" />
         <link
           href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700,800,900"
           rel="stylesheet"
@@ -23,10 +24,16 @@ export default function SiteRootLayout({
         <link href="/style/type/picons.css" rel="stylesheet" />
         <link href="/style/type/budicons.css" rel="stylesheet" />
         <link href="/assets/application.css" rel="stylesheet" />
+        <style>{`
+          .navbar-nav > .dropdown:hover > .dropdown-menu,
+          .navbar-nav > .dropdown:focus-within > .dropdown-menu {
+            display: block;
+          }
+        `}</style>
       </head>
       <body className="full-layout">
         {children}
-        <Script src="/assets/application.js" strategy="afterInteractive" />
+        <Script src="/assets/application.js?v=2" strategy="afterInteractive" />
       </body>
     </html>
   );

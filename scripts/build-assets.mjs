@@ -181,9 +181,17 @@ const jsFiles = [
 const shim = `
 // --- Next.js port shims (replaces turbolinks + rails-ujs) ---
 (function () {
-  document.addEventListener('DOMContentLoaded', function () {
+  function dispatchPageLoad() {
     document.dispatchEvent(new Event('turbolinks:load'));
-  });
+  }
+
+  // next/script with afterInteractive can execute after DOMContentLoaded.
+  // In that case the old Rails initializers still need their page-load event.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', dispatchPageLoad, { once: true });
+  } else {
+    setTimeout(dispatchPageLoad, 0);
+  }
 })();
 (function ($) {
   // Minimal rails-ujs replacement: submit form[data-remote=true] over fetch
