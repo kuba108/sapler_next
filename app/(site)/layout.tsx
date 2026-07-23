@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { appConfig } from '@/lib/app-config';
+import LegacyPageLifecycle from '@/components/site/LegacyPageLifecycle';
 
 export const metadata: Metadata = {
   title: appConfig.tabTitle,
@@ -33,7 +33,7 @@ export default function SiteRootLayout({
       </head>
       <body className="full-layout">
         {children}
-        <Script src="/assets/application.js?v=2" strategy="afterInteractive" />
+        <LegacyPageLifecycle />
       </body>
     </html>
   );

@@ -99,7 +99,7 @@ widgetů) — spouští se tlačítkem „Uložit změny na stránce" v editoru.
 - zkompiluje `application.scss` (Slowave) → `public/assets/application.css`
 - zkompiluje admin `manifest.scss` → `public/assets/admin.css` a devise → `devise.css`
 - poskládá vendor JS bundle (jQuery + Slowave pluginy) → `public/assets/application.js`
-  s náhradními shimy za turbolinks / rails-ujs
+  a převede jeho Rails lifecycle na události řízené Next.js
 - zkopíruje obrázky, fonty a dokumenty z původního Rails projektu
 
 Skript čte původní Rails projekt z nadřazené složky (`--rails-root <cesta>` pro jinou).

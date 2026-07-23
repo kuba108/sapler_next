@@ -7,7 +7,7 @@
  * - Compiles the admin (Light Bootstrap Dashboard) bundle to /assets/admin.css
  * - Compiles the devise (login screen) bundle to /assets/devise.css
  * - Concatenates the public-web vendor JS bundle to /assets/application.js
- *   (jQuery + Slowave plugins, with small shims replacing turbolinks/rails-ujs)
+ *   (jQuery + Slowave plugins, adapted to the Next.js page lifecycle)
  *
  * Usage: node scripts/build-assets.mjs [--rails-root <path>]
  */
@@ -149,7 +149,8 @@ if (fs.existsSync(path.join(appStyles, 'devise/manifest.scss'))) {
 
 console.log('== Building public JS bundle ==');
 // Order mirrors app/assets/javascripts/application.js (sprockets manifest).
-// turbolinks / rails-ujs / activestorage are replaced by shims (see below).
+// turbolinks / rails-ujs / activestorage are replaced by Next.js integration
+// and the small rails-ujs shim below.
 const jsFiles = [
   'vendor/assets/javascript/slowave/jquery.min.js',
   'SHIM',
@@ -179,20 +180,7 @@ const jsFiles = [
 ];
 
 const shim = `
-// --- Next.js port shims (replaces turbolinks + rails-ujs) ---
-(function () {
-  function dispatchPageLoad() {
-    document.dispatchEvent(new Event('turbolinks:load'));
-  }
-
-  // next/script with afterInteractive can execute after DOMContentLoaded.
-  // In that case the old Rails initializers still need their page-load event.
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', dispatchPageLoad, { once: true });
-  } else {
-    setTimeout(dispatchPageLoad, 0);
-  }
-})();
+// --- Next.js port shim (replaces rails-ujs) ---
 (function ($) {
   // Minimal rails-ujs replacement: submit form[data-remote=true] over fetch
   // and re-emit jQuery ajax:success / ajax:error events.
@@ -232,7 +220,11 @@ for (const f of jsFiles) {
     console.warn(`  ! missing JS file: ${f}`);
     continue;
   }
-  bundle += fs.readFileSync(p, 'utf8') + '\n;\n';
+  const source = fs
+    .readFileSync(p, 'utf8')
+    .replaceAll('turbolinks:before-render', 'sapler:before-page-load')
+    .replaceAll('turbolinks:load', 'sapler:page-load');
+  bundle += source + '\n;\n';
 }
 fs.writeFileSync(path.join(ASSETS_OUT, 'application.js'), bundle);
 console.log(`  built application.js (${(bundle.length / 1024).toFixed(0)} kB)`);

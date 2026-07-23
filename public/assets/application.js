@@ -7,20 +7,7 @@ u[o]&&(delete u[o],c?delete n[l]:typeof n.removeAttribute!==i?n.removeAttribute(
 
 ;
 
-// --- Next.js port shims (replaces turbolinks + rails-ujs) ---
-(function () {
-  function dispatchPageLoad() {
-    document.dispatchEvent(new Event('turbolinks:load'));
-  }
-
-  // next/script with afterInteractive can execute after DOMContentLoaded.
-  // In that case the old Rails initializers still need their page-load event.
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', dispatchPageLoad, { once: true });
-  } else {
-    setTimeout(dispatchPageLoad, 0);
-  }
-})();
+// --- Next.js port shim (replaces rails-ujs) ---
 (function ($) {
   // Minimal rails-ujs replacement: submit form[data-remote=true] over fetch
   // and re-emit jQuery ajax:success / ajax:error events.
@@ -2525,7 +2512,7 @@ PR_NOCODE:"nocode",PR_PLAIN:"pln",PR_PUNCTUATION:"pun",PR_SOURCE:"src",PR_STRING
 /*-----------------------------------------------------------------------------------*/
 /*	OWL CAROUSEL
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     
      $(".owlcarousel").owlCarousel({
         navigation: true,
@@ -2578,7 +2565,7 @@ $( document ).on('turbolinks:load', function() {
 /*-----------------------------------------------------------------------------------*/
 /*	FANCYBOX
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     $(".fancybox-media").fancybox({
         arrows: true,
         padding: 0,
@@ -2615,14 +2602,14 @@ $( document ).on('turbolinks:load', function() {
 /*-----------------------------------------------------------------------------------*/
 /*	TABS
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     $('.tabs.services').easytabs({
         animationSpeed: 300,
         updateHash: false,
         cycle: 5000
     });
 });
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     $('.tabs.tabs-top, .tabs.tabs-side').easytabs({
         animationSpeed: 300,
         updateHash: false
@@ -2632,7 +2619,7 @@ $( document ).on('turbolinks:load', function() {
 /*-----------------------------------------------------------------------------------*/
 /*	TESTIMONIALS
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     $('#testimonials').easytabs({
         animationSpeed: 500,
         updateHash: false,
@@ -2701,7 +2688,7 @@ $( document ).on('turbolinks:load', function() {
     }, a.scrollUp = a.fn.scrollUp
 }(jQuery, window, document);
 
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     $.scrollUp({
         scrollName: 'scrollUp', // Element ID
         scrollDistance: 300, // Distance from top/bottom before showing element (px)
@@ -2721,7 +2708,7 @@ $( document ).on('turbolinks:load', function() {
 /*-----------------------------------------------------------------------------------*/
 /*	MENU
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     $('.js-activated').dropdownHover({
         instantlyCloseOthers: false,
         delay: 0
@@ -2736,7 +2723,7 @@ $( document ).on('turbolinks:load', function() {
 /*-----------------------------------------------------------------------------------*/
 /*	ISOTOPE PORTFOLIO
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     var $container = $('.items');
     $container.imagesLoaded(function () {
         $container.isotope({
@@ -2761,7 +2748,7 @@ $( document ).on('turbolinks:load', function() {
 /*-----------------------------------------------------------------------------------*/
 /*	ISOTOPE GRID BLOG
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     var $container = $('.grid-blog');
     $container.imagesLoaded(function () {
         $container.isotope({
@@ -2776,7 +2763,7 @@ $( document ).on('turbolinks:load', function() {
 /*-----------------------------------------------------------------------------------*/
 /*	ISOTOPE LATEST BLOG
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     var $container = $('.latest-blog');
     $container.imagesLoaded(function () {
         $container.isotope({
@@ -2792,13 +2779,13 @@ $( document ).on('turbolinks:load', function() {
 /*-----------------------------------------------------------------------------------*/
 /*	IMAGE HOVER
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     $('.icon-overlay a').prepend('<span class="icn-more"></span>');
 });
 /*-----------------------------------------------------------------------------------*/
 /*	HOME SLIDER
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     var revapi;
     jQuery(document).ready(function () {
 
@@ -2815,7 +2802,7 @@ $( document ).on('turbolinks:load', function() {
 /*-----------------------------------------------------------------------------------*/
 /*	PRETTIFY
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     window.prettyPrint && prettyPrint()
 });
 /*-----------------------------------------------------------------------------------*/
@@ -2827,7 +2814,7 @@ $('a[data-rel]').each(function () {
 /*-----------------------------------------------------------------------------------*/
 /*	VIDEO
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     jQuery('.player').fitVids();
 });
 
@@ -2836,10 +2823,10 @@ $( document ).on('turbolinks:load', function() {
 /*-----------------------------------------------------------------------------------*/
 /*	FORM
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     $('.forms').dcSlickForms();
 });
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     $('.comment-form input[title], .comment-form textarea').each(function () {
         if ($(this).val() === '') {
             $(this).val($(this).attr('title'));
@@ -2860,7 +2847,7 @@ $( document ).on('turbolinks:load', function() {
 /*-----------------------------------------------------------------------------------*/
 /*	PARALLAX MOBILE
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     if (navigator.userAgent.match(/Android/i) ||
         navigator.userAgent.match(/webOS/i) ||
         navigator.userAgent.match(/iPhone/i) ||
@@ -2873,7 +2860,7 @@ $( document ).on('turbolinks:load', function() {
 /*-----------------------------------------------------------------------------------*/
 /*	TOOLTIP
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
     if ($("[rel=tooltip]").length) {
         $("[rel=tooltip]").tooltip();
     }
@@ -2881,7 +2868,7 @@ $( document ).on('turbolinks:load', function() {
 /*-----------------------------------------------------------------------------------*/
 /*	STICKY NAVIGATION
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
 
     var menu = $('.navbar'),
         pos = menu.offset();
@@ -2899,7 +2886,7 @@ $( document ).on('turbolinks:load', function() {
     });
 
 });
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
 	$('.offset').css('padding-top', $('.navbar').height() + 'px');
        
 });
@@ -2935,7 +2922,7 @@ $(document).ready(function(){
 /*-----------------------------------------------------------------------------------*/
 /*	SCROLL NAV
 /*-----------------------------------------------------------------------------------*/
-$( document ).on('turbolinks:load', function() {
+$( document ).on('sapler:page-load', function() {
 	var headerWrapper		= parseInt($('.navbar').height());
 	var offsetTolerance	= -42;	
 	//Detecting user's scroll
@@ -3023,11 +3010,11 @@ SITENAME = {
   }
 };
 
-document.addEventListener('turbolinks:load', function(e) {
+document.addEventListener('sapler:page-load', function(e) {
   UTIL.init();
 });
 
-document.addEventListener('turbolinks:before-render', function(e) {
+document.addEventListener('sapler:before-page-load', function(e) {
   // Unbinds AJAX success listener.
   $(document).unbind('ajaxSuccess');
 
