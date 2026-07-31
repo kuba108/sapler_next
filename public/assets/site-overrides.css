@@ -1,0 +1,26 @@
+/*
+ * Keep the header logo proportional. The legacy Retina script writes fixed
+ * width/height attributes after loading the 2x asset, so both dimensions must
+ * be explicitly corrected when the sticky navigation changes size.
+ */
+.navbar .navbar-header .navbar-brand img {
+  display: block;
+  width: auto !important;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+@media (min-width: 992px) {
+  .navbar.basic.default .navbar-header .navbar-brand img {
+    width: auto !important;
+    height: 80px !important;
+    max-height: 80px;
+  }
+
+  .navbar.basic.fixed .navbar-header .navbar-brand img {
+    width: auto !important;
+    height: 30px !important;
+    max-height: 30px;
+  }
+}

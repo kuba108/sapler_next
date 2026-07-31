@@ -298,6 +298,32 @@ export default function MenuBuilder({
     finishDrag();
   }
 
+  function targetForItem(
+    event: DragEvent<HTMLLIElement>,
+    before: DropTarget,
+    after: DropTarget,
+  ) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const rowMiddle = rect.top + Math.min(rect.height, 44) / 2;
+    return event.clientY < rowMiddle ? before : after;
+  }
+
+  function dragOverItem(
+    event: DragEvent<HTMLLIElement>,
+    before: DropTarget,
+    after: DropTarget,
+  ) {
+    dragOver(event, targetForItem(event, before, after));
+  }
+
+  function dropOnItem(
+    event: DragEvent<HTMLLIElement>,
+    before: DropTarget,
+    after: DropTarget,
+  ) {
+    drop(event, targetForItem(event, before, after));
+  }
+
   function renderDropZone(target: DropTarget, key: string) {
     const active =
       dropTarget?.parentId === target.parentId && dropTarget?.beforeId === target.beforeId;
@@ -386,6 +412,27 @@ export default function MenuBuilder({
                           )}
                         <li
                           className={`menu-item${draggingId === item.id ? ' is-dragged' : ''}`}
+                          onDragEnter={(event) =>
+                            dragOverItem(
+                              event,
+                              { parentId: null, beforeId: item.id },
+                              { parentId: null, beforeId: items[i + 1]?.id ?? null },
+                            )
+                          }
+                          onDragOver={(event) =>
+                            dragOverItem(
+                              event,
+                              { parentId: null, beforeId: item.id },
+                              { parentId: null, beforeId: items[i + 1]?.id ?? null },
+                            )
+                          }
+                          onDrop={(event) =>
+                            dropOnItem(
+                              event,
+                              { parentId: null, beforeId: item.id },
+                              { parentId: null, beforeId: items[i + 1]?.id ?? null },
+                            )
+                          }
                         >
                           <span
                             className="fa fa-bars draggable"
@@ -464,6 +511,36 @@ export default function MenuBuilder({
                                     )}
                                   <li
                                     className={`menu-item${draggingId === child.id ? ' is-dragged' : ''}`}
+                                    onDragEnter={(event) =>
+                                      dragOverItem(
+                                        event,
+                                        { parentId: item.id, beforeId: child.id },
+                                        {
+                                          parentId: item.id,
+                                          beforeId: item.children[j + 1]?.id ?? null,
+                                        },
+                                      )
+                                    }
+                                    onDragOver={(event) =>
+                                      dragOverItem(
+                                        event,
+                                        { parentId: item.id, beforeId: child.id },
+                                        {
+                                          parentId: item.id,
+                                          beforeId: item.children[j + 1]?.id ?? null,
+                                        },
+                                      )
+                                    }
+                                    onDrop={(event) =>
+                                      dropOnItem(
+                                        event,
+                                        { parentId: item.id, beforeId: child.id },
+                                        {
+                                          parentId: item.id,
+                                          beforeId: item.children[j + 1]?.id ?? null,
+                                        },
+                                      )
+                                    }
                                   >
                                     <span
                                       className="fa fa-bars draggable"

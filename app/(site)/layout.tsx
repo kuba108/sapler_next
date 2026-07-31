@@ -24,6 +24,7 @@ export default function SiteRootLayout({
         <link href="/style/type/picons.css" rel="stylesheet" />
         <link href="/style/type/budicons.css" rel="stylesheet" />
         <link href="/assets/application.css" rel="stylesheet" />
+        <link href="/assets/site-overrides.css" rel="stylesheet" />
         <style>{`
           .navbar-nav > .dropdown:hover > .dropdown-menu,
           .navbar-nav > .dropdown:focus-within > .dropdown-menu {
