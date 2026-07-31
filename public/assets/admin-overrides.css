@@ -370,7 +370,47 @@
 .menu-builder .items-panel ul.edit .draggable {
   display: inline-block;
   margin-right: 10px;
-  cursor: move;
+  cursor: grab;
+  user-select: none;
+}
+
+.menu-builder .items-panel ul.edit .draggable:active {
+  cursor: grabbing;
+}
+
+.menu-builder .items-panel li.is-dragged {
+  opacity: 0.4;
+}
+
+.menu-builder .items-panel li.menu-drop-zone {
+  height: 10px;
+  min-height: 10px;
+  padding: 0;
+  margin: -5px 0 5px;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: none;
+  transition: height 120ms ease, background-color 120ms ease;
+}
+
+.menu-builder .items-panel li.menu-drop-zone::after {
+  display: none;
+}
+
+.menu-builder .items-panel ul.is-dragging > li.menu-drop-zone,
+.menu-builder .items-panel ul.is-dragging .sub-menu > li.menu-drop-zone {
+  border: 1px dashed rgba(81, 203, 206, 0.35);
+}
+
+.menu-builder .items-panel li.menu-drop-zone.is-active {
+  height: 26px;
+  background: rgba(81, 203, 206, 0.12);
+  border: 2px dashed #51cbce;
+}
+
+.menu-builder .items-panel .sub-menu li.menu-drop-zone:first-child {
+  margin-top: 5px;
 }
 
 .menu-builder .items-panel .sub-menu {
@@ -400,6 +440,13 @@
 
 .menu-builder .remove-link-btn {
   color: #ff4a55;
+}
+
+.menu-builder .menu-save-btn:disabled {
+  color: #fff;
+  background-color: #68b753;
+  border-color: #68b753;
+  opacity: 0.72;
 }
 
 .menu-editor-modal {
