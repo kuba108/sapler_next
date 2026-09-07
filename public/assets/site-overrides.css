@@ -24,3 +24,169 @@
     max-height: 30px;
   }
 }
+
+/* GDPR cookie consent banner (components/site/CookieConsent.tsx) */
+.cookie-consent {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  animation: cookie-consent-in 0.3s ease-out;
+}
+
+@keyframes cookie-consent-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cookie-consent-card {
+  width: 100%;
+  max-width: 560px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  padding: 24px 28px;
+}
+
+.cookie-consent-title {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.cookie-consent-body {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #555;
+}
+
+.cookie-consent-categories {
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+  margin-bottom: 16px;
+}
+
+.cookie-consent-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.cookie-consent-row-label {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+.cookie-consent-switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.cookie-consent-switch.is-disabled {
+  cursor: default;
+}
+
+.cookie-consent-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: inherit;
+}
+
+.cookie-consent-slider {
+  position: absolute;
+  inset: 0;
+  background: #ccc;
+  border-radius: 999px;
+  transition: background-color 0.15s ease;
+}
+
+.cookie-consent-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.15s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.cookie-consent-switch input:checked + .cookie-consent-slider {
+  background: #2ecc71;
+}
+
+.cookie-consent-switch input:checked + .cookie-consent-slider::before {
+  transform: translateX(18px);
+}
+
+.cookie-consent-switch input:disabled + .cookie-consent-slider {
+  background: #a8e6bd;
+}
+
+.cookie-consent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cookie-consent-btn {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.cookie-consent-btn:hover {
+  opacity: 0.85;
+}
+
+.cookie-consent-btn--ghost {
+  background: #fff;
+  border-color: #ddd;
+  color: #1a1a1a;
+}
+
+.cookie-consent-btn--dark {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+@media (max-width: 480px) {
+  .cookie-consent-card {
+    padding: 20px;
+  }
+
+  .cookie-consent-btn {
+    flex: 1 1 calc(50% - 5px);
+  }
+}

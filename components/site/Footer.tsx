@@ -1,5 +1,6 @@
 import { appConfig } from '@/lib/app-config';
 import { menuHtml } from '@/lib/menus';
+import CookieSettingsLink from './CookieSettingsLink';
 
 /**
  * Faithful port of the Sapler footer from the localized Rails layouts
@@ -160,6 +161,9 @@ export default async function Footer({ lang }: { lang: string }) {
                   >
                     {DOCS[l].pnd}
                   </a>
+                </li>
+                <li>
+                  <CookieSettingsLink lang={l} />
                 </li>
               </ul>
             </div>

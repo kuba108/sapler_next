@@ -1,6 +1,7 @@
 import Header from './Header';
 import Footer from './Footer';
-import CookieBanner from './CookieBanner';
+import CookieConsent from './CookieConsent';
+import GoogleAnalytics from './GoogleAnalytics';
 
 export default function SiteShell({
   lang,
@@ -17,7 +18,8 @@ export default function SiteShell({
 
       <Footer lang={lang} />
 
-      <CookieBanner lang={lang} />
+      <CookieConsent lang={lang} />
+      <GoogleAnalytics />
 
       {/* blueimp gallery overlay markup (unchanged from Slowave template) */}
       <div id="blueimp-gallery" className="blueimp-gallery blueimp-gallery-controls">
