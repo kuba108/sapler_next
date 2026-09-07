@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { requirePolicy } from '@/lib/admin-auth';
 import { prisma } from '@/lib/prisma';
 import { firstAttachmentBlobId } from '@/lib/media';
-import { WRAPPER_PARTS } from '@/lib/widgets';
+import { WRAPPER_PARTS, parseWidgetJson } from '@/lib/widgets';
 import { Breadcrumbs, PageContent } from '@/components/admin/ui';
 import PageComposer, { type SectionData } from './PageComposer';
 import type { WidgetData } from './WidgetEditor';
@@ -42,12 +42,7 @@ export default async function PageEdit({
         });
         parts[part] = await Promise.all(
           wws.map(async (ww) => {
-            let json: Record<string, unknown> = {};
-            try {
-              json = ww.widgets.json ? JSON.parse(ww.widgets.json) : {};
-            } catch {
-              json = {};
-            }
+            const json = parseWidgetJson(ww.widgets.json);
             const imageBlobId =
               ww.widgets.name === 'image'
                 ? await firstAttachmentBlobId('Widget', ww.widgets.id, 'attachments')

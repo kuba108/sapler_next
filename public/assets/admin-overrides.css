@@ -250,6 +250,12 @@
   margin-bottom: 10px;
   background-color: #fff;
   border: 1px dashed #73b1f1;
+  /* Without this, the header preview's nowrap text (a normal block
+     descendant) bubbles its min-content width up to the Bootstrap column
+     flex item and widens the whole column. `overflow: hidden` stops that
+     propagation at the widget box, which is also where we want the
+     ellipsis to clip anyway. */
+  overflow: hidden;
 }
 
 .page-composer .widget-editor .widget-header {
@@ -263,6 +269,16 @@
   margin: 0;
   color: #666;
   font-size: 16px;
+}
+
+.page-composer .widget-editor .widget-header-preview {
+  clear: both;
+  padding: 0 2px 6px;
+  font-size: 12px;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .page-composer .widget-editor .header-btn {
@@ -324,6 +340,76 @@
   display: block;
   overflow: auto;
   padding: 30px 15px;
+}
+
+.admin-toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1100;
+  max-width: 360px;
+}
+
+.admin-toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  color: #fff;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+  animation: admin-toast-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.admin-toast.is-leaving {
+  animation: admin-toast-out 0.2s ease-in forwards;
+}
+
+.admin-toast .admin-toast-icon {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.admin-toast .admin-toast-text {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+@keyframes admin-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes admin-toast-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.publish-btn-label {
+  display: inline-block;
+  animation: admin-btn-label-fade 0.25s ease-out;
+}
+
+@keyframes admin-btn-label-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .composer-modal-backdrop {

@@ -4,6 +4,7 @@ import { canIndex } from '@/lib/acl';
 import Sidebar from '@/components/admin/Sidebar';
 import Navbar from '@/components/admin/Navbar';
 import BootstrapBehaviors from '@/components/admin/BootstrapBehaviors';
+import ToastHost from '@/components/admin/Toast';
 
 export const metadata: Metadata = {
   title: 'Sapler Admin',
@@ -37,6 +38,7 @@ export default async function AdminLayout({
       </head>
       <body className="admin">
         <BootstrapBehaviors />
+        <ToastHost />
         <div className="wrapper">
           <Sidebar nav={nav.map(({ href, label, icon, match }) => ({ href, label, icon, match }))} />
           <div className="main-panel">

@@ -171,15 +171,24 @@ export default async function PageShow({
                     <h4 className="card-title">Jazykové verze</h4>
                   </div>
                   <div className="card-body">
-                    <ul className="list-unstyled">
-                      {locales.map((l) => (
-                        <li key={l.id.toString()}>
-                          <Link href={`/admin/pages/${l.id}`}>
-                            {LANGUAGES.find((x) => x.code === l.language)?.label ?? l.language}: {l.title}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                    <table className="table table-hover table-striped">
+                      <thead>
+                        <tr>
+                          <th>Jazyk</th>
+                          <th>Titulek</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {locales.map((l) => (
+                          <tr key={l.id.toString()}>
+                            <td>{LANGUAGES.find((x) => x.code === l.language)?.label ?? l.language}</td>
+                            <td>
+                              <Link href={`/admin/pages/${l.id}`}>{l.title}</Link>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               )}

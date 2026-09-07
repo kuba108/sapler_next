@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
 import dynamic from 'next/dynamic';
-import { WIDGET_LABELS } from '@/lib/widgets';
+import { WIDGET_LABELS, unescapeHtmlEntities, widgetPreviewText } from '@/lib/widgets';
 import { mediaUrl } from '@/lib/media-url';
 import { updateWidgetJson, uploadWidgetImage } from '../../actions';
 
@@ -19,6 +19,9 @@ export type WidgetData = {
   json: Record<string, unknown>;
   imageBlobId: string | null;
 };
+
+export const WIDGET_DIRTY_EVENT = 'page-composer:widget-dirty';
+export type WidgetDirtyDetail = { id: string; dirty: boolean };
 
 type GalleryOption = { id: string; name: string };
 
@@ -61,6 +64,7 @@ export default function WidgetEditor({
   const [open, setOpen] = useState(false);
   const [edited, setEdited] = useState(false);
   const [imageBlobId, setImageBlobId] = useState(widget.imageBlobId);
+  const [showHtmlSource, setShowHtmlSource] = useState(false);
   const [pending, startTransition] = useTransition();
   const jsonRef = useRef(json);
 
@@ -87,6 +91,27 @@ export default function WidgetEditor({
     return () => window.removeEventListener('page-composer:save-all-widgets', save);
   }, [save]);
 
+  // Report our own edited state to PageComposer's toolbar (it can't see this
+  // widget's local state directly — it's nested in the section/wrapper tree).
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent<WidgetDirtyDetail>(WIDGET_DIRTY_EVENT, {
+        detail: { id: widget.wrapperWidgetId, dirty: edited },
+      }),
+    );
+  }, [edited, widget.wrapperWidgetId]);
+
+  // Clear our entry if the widget unmounts (deleted) while still dirty.
+  useEffect(() => {
+    return () => {
+      window.dispatchEvent(
+        new CustomEvent<WidgetDirtyDetail>(WIDGET_DIRTY_EVENT, {
+          detail: { id: widget.wrapperWidgetId, dirty: false },
+        }),
+      );
+    };
+  }, [widget.wrapperWidgetId]);
+
   function str(key: string): string {
     return (json[key] as string) ?? '';
   }
@@ -97,6 +122,8 @@ export default function WidgetEditor({
       if (result.ok) setImageBlobId(result.blobId);
     });
   }
+
+  const widgetPreview = widgetPreviewText(widget.name, json);
 
   return (
     <div
@@ -132,6 +159,7 @@ export default function WidgetEditor({
             <span className="fa fa-times-circle" />
           </button>
         </div>
+        {!open && widgetPreview && <div className="widget-header-preview">{widgetPreview}</div>}
       </div>
       <div className="widget-body">
         {widget.name === 'headline' && (
@@ -177,7 +205,27 @@ export default function WidgetEditor({
 
         {widget.name === 'wysiwyg' && (
           <Field label="Obsah">
-            <QuillEditor value={str('html')} onChange={(html) => set('html', html)} />
+            <div className="mb-1">
+              <button
+                type="button"
+                className="btn btn-xs btn-secondary"
+                onClick={() => setShowHtmlSource((value) => !value)}
+              >
+                {showHtmlSource ? 'Zobrazit náhled' : 'Zobrazit HTML kód'}
+              </button>
+            </div>
+            {/* Legacy data stores this HTML-entity-escaped (&lt;p&gt;...);
+                decode it once so Quill renders WYSIWYG instead of raw tags. */}
+            {showHtmlSource ? (
+              <textarea
+                className="form-control"
+                rows={10}
+                value={unescapeHtmlEntities(str('html'))}
+                onChange={(e) => set('html', e.target.value)}
+              />
+            ) : (
+              <QuillEditor value={unescapeHtmlEntities(str('html'))} onChange={(html) => set('html', html)} />
+            )}
           </Field>
         )}
 

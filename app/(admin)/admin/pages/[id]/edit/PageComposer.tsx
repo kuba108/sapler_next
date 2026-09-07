@@ -2,7 +2,8 @@
 
 import { Fragment, useEffect, useRef, useState, useTransition } from 'react';
 import { SECTION_TYPES, WRAPPER_TYPES, WIDGET_TYPES, WRAPPER_PARTS } from '@/lib/widgets';
-import WidgetEditor, { type WidgetData } from './WidgetEditor';
+import { notify } from '@/components/admin/Toast';
+import WidgetEditor, { type WidgetData, WIDGET_DIRTY_EVENT, type WidgetDirtyDetail } from './WidgetEditor';
 import {
   moveSection,
   moveWrapper,
@@ -98,11 +99,29 @@ export default function PageComposer({
   galleries: { id: string; name: string }[];
 }) {
   const [pending, startTransition] = useTransition();
-  const [publishMsg, setPublishMsg] = useState('');
   const [sections, setSections] = useState(initialSections);
   const [dropTarget, setDropTarget] = useState<string | null>(null);
   const [draggingWidget, setDraggingWidget] = useState<{ id: string; height: number } | null>(null);
   const [settingsSectionId, setSettingsSectionId] = useState<string | null>(null);
+  const [dirtyWidgetIds, setDirtyWidgetIds] = useState<Set<string>>(new Set());
+  const [justPublished, setJustPublished] = useState(false);
+
+  // Widgets report their own edited state via a DOM event (they're nested
+  // arbitrarily deep in the section/wrapper/part tree), so the toolbar can
+  // gate/label the "Uložit vše" button without prop-drilling.
+  useEffect(() => {
+    function handleDirty(event: Event) {
+      const { id, dirty } = (event as CustomEvent<WidgetDirtyDetail>).detail;
+      setDirtyWidgetIds((current) => {
+        const next = new Set(current);
+        if (dirty) next.add(id);
+        else next.delete(id);
+        return next;
+      });
+    }
+    window.addEventListener(WIDGET_DIRTY_EVENT, handleDirty);
+    return () => window.removeEventListener(WIDGET_DIRTY_EVENT, handleDirty);
+  }, []);
 
   // Mirror the drag payload in a ref so drop handlers read the latest value
   // regardless of React's re-render timing (avoids stale-closure misses).
@@ -144,8 +163,11 @@ export default function PageComposer({
   function publish() {
     startTransition(async () => {
       const res = await publishPage(pageId);
-      setPublishMsg(res.msg);
-      setTimeout(() => setPublishMsg(''), 3000);
+      notify(res.ok, res.msg);
+      if (res.ok) {
+        setJustPublished(true);
+        setTimeout(() => setJustPublished(false), 2500);
+      }
     });
   }
 
@@ -243,14 +265,24 @@ export default function PageComposer({
             </div>
             <div className="float-right">
               <div className="btn-group">
-                <button type="button" className="btn btn-success" onClick={saveAllWidgets} disabled={pending}>
+                <button
+                  type="button"
+                  className={`btn btn-fill${dirtyWidgetIds.size > 0 ? ' btn-warning' : ''}`}
+                  onClick={saveAllWidgets}
+                  disabled={pending || dirtyWidgetIds.size === 0}
+                  title={dirtyWidgetIds.size === 0 ? 'Žádné neuložené změny' : undefined}
+                >
                   <span className="fa fa-save" /> Uložit vše
+                  {dirtyWidgetIds.size > 0 && (
+                    <span className="badge badge-light ml-2">{dirtyWidgetIds.size}</span>
+                  )}
                 </button>
                 <button className="btn btn-success btn-fill" onClick={publish} disabled={pending}>
-                  Uložit změny na stránce
+                  <span key={justPublished ? 'done' : 'idle'} className="publish-btn-label">
+                    {justPublished ? 'Stránka je uložena :)' : 'Uložit změny na stránce'}
+                  </span>
                 </button>
               </div>
-              {publishMsg && <span className="ml-2">{publishMsg}</span>}
             </div>
           </div>
         </div>

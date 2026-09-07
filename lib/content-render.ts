@@ -4,6 +4,7 @@ import * as path from 'node:path';
 import { prisma } from './prisma';
 import { firstAttachmentBlobId } from './media';
 import { mediaUrl } from './media-url';
+import { parseWidgetJson, unescapeHtmlEntities } from './widgets';
 
 /**
  * Server-side port of the Rails decorators + widget templates that generate the
@@ -17,15 +18,6 @@ function esc(s: unknown): string {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
-}
-
-function unescapeHtml(s: string): string {
-  return s
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&amp;/g, '&');
 }
 
 type Json = Record<string, unknown>;
@@ -52,7 +44,7 @@ async function renderWidget(
   <p class="lead">${esc(json.text)}</p>
 </div>`;
     case 'wysiwyg':
-      return unescapeHtml(String(json.html ?? ''));
+      return unescapeHtmlEntities(String(json.html ?? ''));
     case 'divide':
       return `<div class="divide${esc(json.size)}"></div>`;
     case 'image': {
@@ -210,12 +202,7 @@ async function renderPart(wrapperId: bigint, part: string, pageLanguage: string)
   let html = '';
   for (const item of items) {
     const w = item.widgets;
-    let json: Json = {};
-    try {
-      json = w.json ? JSON.parse(w.json) : {};
-    } catch {
-      json = {};
-    }
+    const json: Json = parseWidgetJson(w.json);
     html += await renderWidget(w.id, w.name ?? '', json, pageLanguage);
   }
   return html;
