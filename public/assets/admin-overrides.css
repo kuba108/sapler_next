@@ -1078,3 +1078,28 @@
     padding-left: 15px;
   }
 }
+
+/* .form-inline .form-control sets width:auto (Bootstrap, same specificity
+   as a bare class here), which shrinks these to content and truncates the
+   search placeholder / crams the language label under the select's arrow.
+   Scope through the form to outrank it. */
+.pages-filter-form .pages-filter-search {
+  width: 260px;
+}
+
+.pages-filter-form .pages-filter-lang {
+  width: 180px;
+}
+
+@media (max-width: 767px) {
+  .pages-filter-form {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .pages-filter-form .pages-filter-search,
+  .pages-filter-form .pages-filter-lang {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+}
