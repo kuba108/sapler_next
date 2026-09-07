@@ -7,34 +7,6 @@ u[o]&&(delete u[o],c?delete n[l]:typeof n.removeAttribute!==i?n.removeAttribute(
 
 ;
 
-// --- Next.js port shim (replaces rails-ujs) ---
-(function ($) {
-  // Minimal rails-ujs replacement: submit form[data-remote=true] over fetch
-  // and re-emit jQuery ajax:success / ajax:error events.
-  $(function () {
-    $(document).on('submit', 'form[data-remote="true"]', function (e) {
-      e.preventDefault();
-      var form = this;
-      if ($(form).data('validator') && !$(form).valid()) return;
-      fetch(form.action, {
-        method: (form.method || 'post').toUpperCase(),
-        body: new FormData(form),
-        headers: { Accept: 'application/json' },
-      })
-        .then(function (res) {
-          if (res.ok) {
-            $(form).trigger('ajax:success', res);
-          } else {
-            $(form).trigger('ajax:error', res);
-          }
-        })
-        .catch(function () {
-          $(form).trigger('ajax:error');
-        });
-    });
-  });
-})(jQuery);
-
 ;
 /*!
  * Bootstrap v3.0.3 (http://getbootstrap.com)
@@ -1464,40 +1436,25 @@ $(function() {
 ;
 var ContactForm = {
 
+  // Plain (non-AJAX) form POST now — /poslat-formular redirects back here
+  // with ?formular=uspech|chyba, so just reveal the matching message and
+  // strip the param so a refresh doesn't keep re-showing it.
   init: function() {
-    $('.contact-form')
-      .on('ajax:success', function(e) {
-        e.preventDefault();
-        let wrapper = $(e.target).parents('.contact-form-widget');
-        $(this).removeClass('was-validated');
-        $(this)[0].reset();
+    var status = new URLSearchParams(window.location.search).get('formular');
+    if (!status) return;
+
+    $('.contact-form-widget').each(function() {
+      var wrapper = $(this);
+      if (status === 'uspech') {
         wrapper.find('.success-message').show();
-      })
-      .on('ajax:error', function(e) {
-        e.preventDefault();
-        let wrapper = $(e.target).parents('.contact-form-widget');
+      } else if (status === 'chyba') {
         wrapper.find('.error-message').show();
-      })
-      .validate({
-        rules: {
-          'name': {
-            minlength: 2,
-            required: true
-          },
-          'contact': {
-            minlength: 2,
-            required: true,
-          }
-        },
-        highlight: function (element) {
-          $(element).closest('.control-group').removeClass('success').addClass('error');
-        },
-        success: function (element) {
-          element
-            .addClass('valid')
-            .closest('.control-group').removeClass('error').addClass('success');
-        }
-      });
+      }
+    });
+
+    var url = new URL(window.location.href);
+    url.searchParams.delete('formular');
+    window.history.replaceState({}, '', url);
   }
 
 };

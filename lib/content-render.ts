@@ -169,9 +169,9 @@ async function renderWidget(
     }
     case 'contact_form':
       return `<div class="contact-form-widget">
-  <div class="success-message">${esc(json.success_message)}</div>
-  <div class="error-message">Formulář se neodeslal.</div>
-  <form action="/poslat-formular" method="post" class="contact-form needs-validation" data-remote="true" novalidate>
+  <div class="success-message">${esc(json.success_message || 'Formulář byl úspěšně odeslán.')}</div>
+  <div class="error-message">Formulář se nepovedlo odeslat. Zkuste to prosím znovu.</div>
+  <form action="/poslat-formular" method="post" class="contact-form">
     ${json.target_email ? `<input type="hidden" name="target_email" value="${esc(json.target_email)}">` : ''}
     <div class="form-group">
       <label for="name">${esc(json.label_name || 'Vaše jméno')}</label>

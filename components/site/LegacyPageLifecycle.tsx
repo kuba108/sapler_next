@@ -27,7 +27,7 @@ export default function LegacyPageLifecycle() {
 
   return (
     <Script
-      src="/assets/application.js?v=4"
+      src="/assets/application.js?v=7"
       strategy="afterInteractive"
       onReady={() => setScriptReady(true)}
     />

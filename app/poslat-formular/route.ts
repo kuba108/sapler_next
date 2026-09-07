@@ -1,9 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendContactEmail, type ContactFormData } from '@/lib/mailer';
 
+const STATUS_PARAM = 'formular';
+
+/** Redirects back to the page the form was submitted from, with a status flag. */
+function redirectWithStatus(req: NextRequest, status: 'uspech' | 'chyba') {
+  let target = new URL('/', req.url);
+  const referer = req.headers.get('referer');
+  if (referer) {
+    try {
+      const refererUrl = new URL(referer);
+      if (refererUrl.origin === req.nextUrl.origin) target = refererUrl;
+    } catch {
+      // malformed referer — fall back to "/"
+    }
+  }
+  target.searchParams.set(STATUS_PARAM, status);
+  return NextResponse.redirect(target, { status: 303 });
+}
+
 /**
- * Port of Rails MailsController#send_contact_form.
- * Accepts form-encoded or JSON body, returns the same JSON contract.
+ * Plain (non-AJAX) form POST target for the contact_form widget — a normal
+ * browser navigation, so the response is always a redirect back to the
+ * originating page. The client picks up `?formular=uspech|chyba` on load and
+ * shows the matching message (see ContactForm.init in application.js).
  */
 export async function POST(req: NextRequest) {
   try {
@@ -22,21 +42,9 @@ export async function POST(req: NextRequest) {
     }
 
     await sendContactEmail(data);
-
-    return NextResponse.json({
-      result: 'success',
-      id: 'contact_form_sent',
-      msg: 'Formulář byl úspěšně odeslán.',
-    });
+    return redirectWithStatus(req, 'uspech');
   } catch (e) {
     console.error('contact form error', e);
-    return NextResponse.json(
-      {
-        result: 'error',
-        id: 'contact_form_sent',
-        msg: 'Omlouváme se, formulář se nepovedlo odeslat. Zkuste to prosím znovu nebo nás kontaktujte jinou formou.',
-      },
-      { status: 422 },
-    );
+    return redirectWithStatus(req, 'chyba');
   }
 }
