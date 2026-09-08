@@ -38,11 +38,6 @@ export type active_storage_variant_records = Prisma.active_storage_variant_recor
  */
 export type admin_users = Prisma.admin_usersModel
 /**
- * Model ar_internal_metadata
- * 
- */
-export type ar_internal_metadata = Prisma.ar_internal_metadataModel
-/**
  * Model contact_rate_limits
  * 
  */
@@ -93,20 +88,10 @@ export type reviews = Prisma.reviewsModel
  */
 export type routes = Prisma.routesModel
 /**
- * Model schema_migrations
- * 
- */
-export type schema_migrations = Prisma.schema_migrationsModel
-/**
  * Model sections
  * 
  */
 export type sections = Prisma.sectionsModel
-/**
- * Model sequelize_meta
- * 
- */
-export type sequelize_meta = Prisma.sequelize_metaModel
 /**
  * Model settings
  * 

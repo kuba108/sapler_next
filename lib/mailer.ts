@@ -3,6 +3,16 @@ import { Resend } from 'resend';
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
+/**
+ * `target_email` arrives from the public contact form's POST body, so it
+ * cannot be trusted as the send destination directly — otherwise the form
+ * is an open relay, letting anyone send arbitrary mail through this
+ * project's Resend account to any address. Only the addresses actually
+ * configured on a contact_form widget are allowed through; anything else
+ * falls back to CONTACT_FALLBACK_EMAIL.
+ */
+const ALLOWED_TARGET_EMAILS = ['info@sapler.cz', 'majak108@gmail.com'];
+
 export type ContactFormData = {
   name?: string;
   email?: string;
@@ -47,7 +57,8 @@ export async function sendContactEmail(data: ContactFormData): Promise<void> {
   </body>
 </html>`;
 
-  const to = data.target_email || process.env.CONTACT_FALLBACK_EMAIL || 'info@sapler.cz';
+  const fallback = process.env.CONTACT_FALLBACK_EMAIL || 'info@sapler.cz';
+  const to = data.target_email && ALLOWED_TARGET_EMAILS.includes(data.target_email) ? data.target_email : fallback;
   const from = process.env.RESEND_FROM || 'web@elegantniweb.cz';
 
   const { error } = await resend.emails.send({

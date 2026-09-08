@@ -173,6 +173,10 @@ async function renderWidget(
   <div class="error-message">Formulář se nepovedlo odeslat. Zkuste to prosím znovu.</div>
   <form action="/poslat-formular" method="post" class="contact-form">
     ${json.target_email ? `<input type="hidden" name="target_email" value="${esc(json.target_email)}">` : ''}
+    <div style="position:absolute;left:-9999px" aria-hidden="true">
+      <label for="website">Nechte prázdné</label>
+      <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+    </div>
     <div class="form-group">
       <label for="name">${esc(json.label_name || 'Vaše jméno')}</label>
       <input type="text" name="name" class="form-control" required>

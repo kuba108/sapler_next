@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendContactEmail, type ContactFormData } from '@/lib/mailer';
+import { checkContactRateLimit, getClientIp } from '@/lib/contact-rate-limit';
 
 const STATUS_PARAM = 'formular';
 
@@ -28,9 +29,12 @@ function redirectWithStatus(req: NextRequest, status: 'uspech' | 'chyba') {
 export async function POST(req: NextRequest) {
   try {
     let data: ContactFormData;
+    let honeypot = '';
     const contentType = req.headers.get('content-type') || '';
     if (contentType.includes('application/json')) {
-      data = await req.json();
+      const body = await req.json();
+      data = body;
+      honeypot = body.website ?? '';
     } else {
       const form = await req.formData();
       data = {
@@ -39,7 +43,15 @@ export async function POST(req: NextRequest) {
         text: form.get('text')?.toString(),
         target_email: form.get('target_email')?.toString(),
       };
+      honeypot = form.get('website')?.toString() ?? '';
     }
+
+    // Honeypot: a hidden field real visitors never see or fill. A bot that
+    // fills it gets a fake success so it doesn't adapt, but nothing is sent.
+    if (honeypot) return redirectWithStatus(req, 'uspech');
+
+    const allowed = await checkContactRateLimit(getClientIp(req.headers));
+    if (!allowed) return redirectWithStatus(req, 'chyba');
 
     await sendContactEmail(data);
     return redirectWithStatus(req, 'uspech');

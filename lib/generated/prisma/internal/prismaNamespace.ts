@@ -401,7 +401,6 @@ export const ModelName = {
   active_storage_blobs: 'active_storage_blobs',
   active_storage_variant_records: 'active_storage_variant_records',
   admin_users: 'admin_users',
-  ar_internal_metadata: 'ar_internal_metadata',
   contact_rate_limits: 'contact_rate_limits',
   galleries: 'galleries',
   gallery_items: 'gallery_items',
@@ -412,9 +411,7 @@ export const ModelName = {
   pages: 'pages',
   reviews: 'reviews',
   routes: 'routes',
-  schema_migrations: 'schema_migrations',
   sections: 'sections',
-  sequelize_meta: 'sequelize_meta',
   settings: 'settings',
   widgets: 'widgets',
   wrapper_widgets: 'wrapper_widgets',
@@ -434,7 +431,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "active_storage_attachments" | "active_storage_blobs" | "active_storage_variant_records" | "admin_users" | "ar_internal_metadata" | "contact_rate_limits" | "galleries" | "gallery_items" | "media_asset_links" | "media_assets" | "menu_items" | "menus" | "pages" | "reviews" | "routes" | "schema_migrations" | "sections" | "sequelize_meta" | "settings" | "widgets" | "wrapper_widgets" | "wrappers"
+    modelProps: "active_storage_attachments" | "active_storage_blobs" | "active_storage_variant_records" | "admin_users" | "contact_rate_limits" | "galleries" | "gallery_items" | "media_asset_links" | "media_assets" | "menu_items" | "menus" | "pages" | "reviews" | "routes" | "sections" | "settings" | "widgets" | "wrapper_widgets" | "wrappers"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -731,80 +728,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.admin_usersCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.Admin_usersCountAggregateOutputType> | number
-        }
-      }
-    }
-    ar_internal_metadata: {
-      payload: Prisma.$ar_internal_metadataPayload<ExtArgs>
-      fields: Prisma.ar_internal_metadataFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.ar_internal_metadataFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ar_internal_metadataPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.ar_internal_metadataFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ar_internal_metadataPayload>
-        }
-        findFirst: {
-          args: Prisma.ar_internal_metadataFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ar_internal_metadataPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.ar_internal_metadataFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ar_internal_metadataPayload>
-        }
-        findMany: {
-          args: Prisma.ar_internal_metadataFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ar_internal_metadataPayload>[]
-        }
-        create: {
-          args: Prisma.ar_internal_metadataCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ar_internal_metadataPayload>
-        }
-        createMany: {
-          args: Prisma.ar_internal_metadataCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.ar_internal_metadataCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ar_internal_metadataPayload>[]
-        }
-        delete: {
-          args: Prisma.ar_internal_metadataDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ar_internal_metadataPayload>
-        }
-        update: {
-          args: Prisma.ar_internal_metadataUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ar_internal_metadataPayload>
-        }
-        deleteMany: {
-          args: Prisma.ar_internal_metadataDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.ar_internal_metadataUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.ar_internal_metadataUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ar_internal_metadataPayload>[]
-        }
-        upsert: {
-          args: Prisma.ar_internal_metadataUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$ar_internal_metadataPayload>
-        }
-        aggregate: {
-          args: Prisma.Ar_internal_metadataAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAr_internal_metadata>
-        }
-        groupBy: {
-          args: Prisma.ar_internal_metadataGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Ar_internal_metadataGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.ar_internal_metadataCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Ar_internal_metadataCountAggregateOutputType> | number
         }
       }
     }
@@ -1548,80 +1471,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    schema_migrations: {
-      payload: Prisma.$schema_migrationsPayload<ExtArgs>
-      fields: Prisma.schema_migrationsFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.schema_migrationsFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$schema_migrationsPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.schema_migrationsFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$schema_migrationsPayload>
-        }
-        findFirst: {
-          args: Prisma.schema_migrationsFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$schema_migrationsPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.schema_migrationsFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$schema_migrationsPayload>
-        }
-        findMany: {
-          args: Prisma.schema_migrationsFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$schema_migrationsPayload>[]
-        }
-        create: {
-          args: Prisma.schema_migrationsCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$schema_migrationsPayload>
-        }
-        createMany: {
-          args: Prisma.schema_migrationsCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.schema_migrationsCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$schema_migrationsPayload>[]
-        }
-        delete: {
-          args: Prisma.schema_migrationsDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$schema_migrationsPayload>
-        }
-        update: {
-          args: Prisma.schema_migrationsUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$schema_migrationsPayload>
-        }
-        deleteMany: {
-          args: Prisma.schema_migrationsDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.schema_migrationsUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.schema_migrationsUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$schema_migrationsPayload>[]
-        }
-        upsert: {
-          args: Prisma.schema_migrationsUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$schema_migrationsPayload>
-        }
-        aggregate: {
-          args: Prisma.Schema_migrationsAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateSchema_migrations>
-        }
-        groupBy: {
-          args: Prisma.schema_migrationsGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Schema_migrationsGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.schema_migrationsCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Schema_migrationsCountAggregateOutputType> | number
-        }
-      }
-    }
     sections: {
       payload: Prisma.$sectionsPayload<ExtArgs>
       fields: Prisma.sectionsFieldRefs
@@ -1693,80 +1542,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.sectionsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.SectionsCountAggregateOutputType> | number
-        }
-      }
-    }
-    sequelize_meta: {
-      payload: Prisma.$sequelize_metaPayload<ExtArgs>
-      fields: Prisma.sequelize_metaFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.sequelize_metaFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$sequelize_metaPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.sequelize_metaFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$sequelize_metaPayload>
-        }
-        findFirst: {
-          args: Prisma.sequelize_metaFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$sequelize_metaPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.sequelize_metaFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$sequelize_metaPayload>
-        }
-        findMany: {
-          args: Prisma.sequelize_metaFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$sequelize_metaPayload>[]
-        }
-        create: {
-          args: Prisma.sequelize_metaCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$sequelize_metaPayload>
-        }
-        createMany: {
-          args: Prisma.sequelize_metaCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.sequelize_metaCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$sequelize_metaPayload>[]
-        }
-        delete: {
-          args: Prisma.sequelize_metaDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$sequelize_metaPayload>
-        }
-        update: {
-          args: Prisma.sequelize_metaUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$sequelize_metaPayload>
-        }
-        deleteMany: {
-          args: Prisma.sequelize_metaDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.sequelize_metaUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.sequelize_metaUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$sequelize_metaPayload>[]
-        }
-        upsert: {
-          args: Prisma.sequelize_metaUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$sequelize_metaPayload>
-        }
-        aggregate: {
-          args: Prisma.Sequelize_metaAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateSequelize_meta>
-        }
-        groupBy: {
-          args: Prisma.sequelize_metaGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Sequelize_metaGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.sequelize_metaCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Sequelize_metaCountAggregateOutputType> | number
         }
       }
     }
@@ -2164,16 +1939,6 @@ export const Admin_usersScalarFieldEnum = {
 export type Admin_usersScalarFieldEnum = (typeof Admin_usersScalarFieldEnum)[keyof typeof Admin_usersScalarFieldEnum]
 
 
-export const Ar_internal_metadataScalarFieldEnum = {
-  key: 'key',
-  value: 'value',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
-} as const
-
-export type Ar_internal_metadataScalarFieldEnum = (typeof Ar_internal_metadataScalarFieldEnum)[keyof typeof Ar_internal_metadataScalarFieldEnum]
-
-
 export const Contact_rate_limitsScalarFieldEnum = {
   key_hash: 'key_hash',
   window_started_at: 'window_started_at',
@@ -2335,13 +2100,6 @@ export const RoutesScalarFieldEnum = {
 export type RoutesScalarFieldEnum = (typeof RoutesScalarFieldEnum)[keyof typeof RoutesScalarFieldEnum]
 
 
-export const Schema_migrationsScalarFieldEnum = {
-  version: 'version'
-} as const
-
-export type Schema_migrationsScalarFieldEnum = (typeof Schema_migrationsScalarFieldEnum)[keyof typeof Schema_migrationsScalarFieldEnum]
-
-
 export const SectionsScalarFieldEnum = {
   id: 'id',
   page_id: 'page_id',
@@ -2354,13 +2112,6 @@ export const SectionsScalarFieldEnum = {
 } as const
 
 export type SectionsScalarFieldEnum = (typeof SectionsScalarFieldEnum)[keyof typeof SectionsScalarFieldEnum]
-
-
-export const Sequelize_metaScalarFieldEnum = {
-  name: 'name'
-} as const
-
-export type Sequelize_metaScalarFieldEnum = (typeof Sequelize_metaScalarFieldEnum)[keyof typeof Sequelize_metaScalarFieldEnum]
 
 
 export const SettingsScalarFieldEnum = {
@@ -2715,7 +2466,6 @@ export type GlobalOmitConfig = {
   active_storage_blobs?: Prisma.active_storage_blobsOmit
   active_storage_variant_records?: Prisma.active_storage_variant_recordsOmit
   admin_users?: Prisma.admin_usersOmit
-  ar_internal_metadata?: Prisma.ar_internal_metadataOmit
   contact_rate_limits?: Prisma.contact_rate_limitsOmit
   galleries?: Prisma.galleriesOmit
   gallery_items?: Prisma.gallery_itemsOmit
@@ -2726,9 +2476,7 @@ export type GlobalOmitConfig = {
   pages?: Prisma.pagesOmit
   reviews?: Prisma.reviewsOmit
   routes?: Prisma.routesOmit
-  schema_migrations?: Prisma.schema_migrationsOmit
   sections?: Prisma.sectionsOmit
-  sequelize_meta?: Prisma.sequelize_metaOmit
   settings?: Prisma.settingsOmit
   widgets?: Prisma.widgetsOmit
   wrapper_widgets?: Prisma.wrapper_widgetsOmit

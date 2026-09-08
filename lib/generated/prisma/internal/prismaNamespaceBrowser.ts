@@ -55,7 +55,6 @@ export const ModelName = {
   active_storage_blobs: 'active_storage_blobs',
   active_storage_variant_records: 'active_storage_variant_records',
   admin_users: 'admin_users',
-  ar_internal_metadata: 'ar_internal_metadata',
   contact_rate_limits: 'contact_rate_limits',
   galleries: 'galleries',
   gallery_items: 'gallery_items',
@@ -66,9 +65,7 @@ export const ModelName = {
   pages: 'pages',
   reviews: 'reviews',
   routes: 'routes',
-  schema_migrations: 'schema_migrations',
   sections: 'sections',
-  sequelize_meta: 'sequelize_meta',
   settings: 'settings',
   widgets: 'widgets',
   wrapper_widgets: 'wrapper_widgets',
@@ -148,16 +145,6 @@ export const Admin_usersScalarFieldEnum = {
 } as const
 
 export type Admin_usersScalarFieldEnum = (typeof Admin_usersScalarFieldEnum)[keyof typeof Admin_usersScalarFieldEnum]
-
-
-export const Ar_internal_metadataScalarFieldEnum = {
-  key: 'key',
-  value: 'value',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
-} as const
-
-export type Ar_internal_metadataScalarFieldEnum = (typeof Ar_internal_metadataScalarFieldEnum)[keyof typeof Ar_internal_metadataScalarFieldEnum]
 
 
 export const Contact_rate_limitsScalarFieldEnum = {
@@ -321,13 +308,6 @@ export const RoutesScalarFieldEnum = {
 export type RoutesScalarFieldEnum = (typeof RoutesScalarFieldEnum)[keyof typeof RoutesScalarFieldEnum]
 
 
-export const Schema_migrationsScalarFieldEnum = {
-  version: 'version'
-} as const
-
-export type Schema_migrationsScalarFieldEnum = (typeof Schema_migrationsScalarFieldEnum)[keyof typeof Schema_migrationsScalarFieldEnum]
-
-
 export const SectionsScalarFieldEnum = {
   id: 'id',
   page_id: 'page_id',
@@ -340,13 +320,6 @@ export const SectionsScalarFieldEnum = {
 } as const
 
 export type SectionsScalarFieldEnum = (typeof SectionsScalarFieldEnum)[keyof typeof SectionsScalarFieldEnum]
-
-
-export const Sequelize_metaScalarFieldEnum = {
-  name: 'name'
-} as const
-
-export type Sequelize_metaScalarFieldEnum = (typeof Sequelize_metaScalarFieldEnum)[keyof typeof Sequelize_metaScalarFieldEnum]
 
 
 export const SettingsScalarFieldEnum = {
