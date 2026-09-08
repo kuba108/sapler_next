@@ -15,6 +15,7 @@ export type PolicyModel =
   | 'review'
   | 'gallery'
   | 'gallery_item'
+  | 'asset'
   | 'setting';
 
 export function can(

@@ -26,6 +26,7 @@ export default async function AdminLayout({
     { href: '/admin/pages', label: 'Stránky', icon: 'nc-single-copy-04', match: '/admin/pages', model: 'page' as const },
     { href: '/admin/reviews', label: 'Recenze', icon: 'nc-email-85', match: '/admin/reviews', model: 'review' as const },
     { href: '/admin/galleries', label: 'Galerie', icon: 'nc-album-2', match: '/admin/galleries', model: 'gallery' as const },
+    { href: '/admin/media', label: 'Média', icon: 'nc-cloud-download-93', match: '/admin/media', model: 'asset' as const },
     { href: '/admin/settings', label: 'Nastavení', icon: 'nc-settings-gear-64', match: '/admin/settings', model: 'setting' as const },
   ].filter((item) => canIndex(user.acl, item.model));
 

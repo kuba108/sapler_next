@@ -23,6 +23,7 @@ const FULL_ACL = {
     review: { index: '1', show: '1', update: '1', create: '1', destroy: '1' },
     gallery: { index: '1', show: '1', update: '1', create: '1', destroy: '1' },
     gallery_item: { index: '1', show: '1', update: '1', create: '1', destroy: '1' },
+    asset: { index: '1', show: '1', update: '1', create: '1', destroy: '1' },
     setting: { index: '1', show: '1', update: '1', create: '1', destroy: '1' },
   },
 };

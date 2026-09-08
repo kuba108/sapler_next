@@ -401,6 +401,7 @@ export const ModelName = {
   active_storage_blobs: 'active_storage_blobs',
   active_storage_variant_records: 'active_storage_variant_records',
   admin_users: 'admin_users',
+  assets: 'assets',
   contact_rate_limits: 'contact_rate_limits',
   galleries: 'galleries',
   gallery_items: 'gallery_items',
@@ -431,7 +432,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "active_storage_attachments" | "active_storage_blobs" | "active_storage_variant_records" | "admin_users" | "contact_rate_limits" | "galleries" | "gallery_items" | "media_asset_links" | "media_assets" | "menu_items" | "menus" | "pages" | "reviews" | "routes" | "sections" | "settings" | "widgets" | "wrapper_widgets" | "wrappers"
+    modelProps: "active_storage_attachments" | "active_storage_blobs" | "active_storage_variant_records" | "admin_users" | "assets" | "contact_rate_limits" | "galleries" | "gallery_items" | "media_asset_links" | "media_assets" | "menu_items" | "menus" | "pages" | "reviews" | "routes" | "sections" | "settings" | "widgets" | "wrapper_widgets" | "wrappers"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -728,6 +729,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.admin_usersCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.Admin_usersCountAggregateOutputType> | number
+        }
+      }
+    }
+    assets: {
+      payload: Prisma.$assetsPayload<ExtArgs>
+      fields: Prisma.assetsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.assetsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$assetsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.assetsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$assetsPayload>
+        }
+        findFirst: {
+          args: Prisma.assetsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$assetsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.assetsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$assetsPayload>
+        }
+        findMany: {
+          args: Prisma.assetsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$assetsPayload>[]
+        }
+        create: {
+          args: Prisma.assetsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$assetsPayload>
+        }
+        createMany: {
+          args: Prisma.assetsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.assetsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$assetsPayload>[]
+        }
+        delete: {
+          args: Prisma.assetsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$assetsPayload>
+        }
+        update: {
+          args: Prisma.assetsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$assetsPayload>
+        }
+        deleteMany: {
+          args: Prisma.assetsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.assetsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.assetsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$assetsPayload>[]
+        }
+        upsert: {
+          args: Prisma.assetsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$assetsPayload>
+        }
+        aggregate: {
+          args: Prisma.AssetsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAssets>
+        }
+        groupBy: {
+          args: Prisma.assetsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AssetsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.assetsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AssetsCountAggregateOutputType> | number
         }
       }
     }
@@ -1939,6 +2014,23 @@ export const Admin_usersScalarFieldEnum = {
 export type Admin_usersScalarFieldEnum = (typeof Admin_usersScalarFieldEnum)[keyof typeof Admin_usersScalarFieldEnum]
 
 
+export const AssetsScalarFieldEnum = {
+  id: 'id',
+  permalink: 'permalink',
+  permalink_base: 'permalink_base',
+  name: 'name',
+  admin_user_id: 'admin_user_id',
+  description: 'description',
+  mime_type: 'mime_type',
+  tags: 'tags',
+  state: 'state',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type AssetsScalarFieldEnum = (typeof AssetsScalarFieldEnum)[keyof typeof AssetsScalarFieldEnum]
+
+
 export const Contact_rate_limitsScalarFieldEnum = {
   key_hash: 'key_hash',
   window_started_at: 'window_started_at',
@@ -2466,6 +2558,7 @@ export type GlobalOmitConfig = {
   active_storage_blobs?: Prisma.active_storage_blobsOmit
   active_storage_variant_records?: Prisma.active_storage_variant_recordsOmit
   admin_users?: Prisma.admin_usersOmit
+  assets?: Prisma.assetsOmit
   contact_rate_limits?: Prisma.contact_rate_limitsOmit
   galleries?: Prisma.galleriesOmit
   gallery_items?: Prisma.gallery_itemsOmit

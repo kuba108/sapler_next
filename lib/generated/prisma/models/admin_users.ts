@@ -312,6 +312,7 @@ export type admin_usersWhereInput = {
   last_sign_in_at?: Prisma.DateTimeNullableFilter<"admin_users"> | Date | string | null
   current_sign_in_ip?: Prisma.StringNullableFilter<"admin_users"> | string | null
   last_sign_in_ip?: Prisma.StringNullableFilter<"admin_users"> | string | null
+  assets?: Prisma.AssetsListRelationFilter
   galleries?: Prisma.GalleriesListRelationFilter
   pages?: Prisma.PagesListRelationFilter
 }
@@ -334,6 +335,7 @@ export type admin_usersOrderByWithRelationInput = {
   last_sign_in_at?: Prisma.SortOrderInput | Prisma.SortOrder
   current_sign_in_ip?: Prisma.SortOrderInput | Prisma.SortOrder
   last_sign_in_ip?: Prisma.SortOrderInput | Prisma.SortOrder
+  assets?: Prisma.assetsOrderByRelationAggregateInput
   galleries?: Prisma.galleriesOrderByRelationAggregateInput
   pages?: Prisma.pagesOrderByRelationAggregateInput
 }
@@ -359,6 +361,7 @@ export type admin_usersWhereUniqueInput = Prisma.AtLeast<{
   last_sign_in_at?: Prisma.DateTimeNullableFilter<"admin_users"> | Date | string | null
   current_sign_in_ip?: Prisma.StringNullableFilter<"admin_users"> | string | null
   last_sign_in_ip?: Prisma.StringNullableFilter<"admin_users"> | string | null
+  assets?: Prisma.AssetsListRelationFilter
   galleries?: Prisma.GalleriesListRelationFilter
   pages?: Prisma.PagesListRelationFilter
 }, "id" | "email" | "reset_password_token">
@@ -429,6 +432,7 @@ export type admin_usersCreateInput = {
   last_sign_in_at?: Date | string | null
   current_sign_in_ip?: string | null
   last_sign_in_ip?: string | null
+  assets?: Prisma.assetsCreateNestedManyWithoutAdmin_usersInput
   galleries?: Prisma.galleriesCreateNestedManyWithoutAdmin_usersInput
   pages?: Prisma.pagesCreateNestedManyWithoutAdmin_usersInput
 }
@@ -451,6 +455,7 @@ export type admin_usersUncheckedCreateInput = {
   last_sign_in_at?: Date | string | null
   current_sign_in_ip?: string | null
   last_sign_in_ip?: string | null
+  assets?: Prisma.assetsUncheckedCreateNestedManyWithoutAdmin_usersInput
   galleries?: Prisma.galleriesUncheckedCreateNestedManyWithoutAdmin_usersInput
   pages?: Prisma.pagesUncheckedCreateNestedManyWithoutAdmin_usersInput
 }
@@ -473,6 +478,7 @@ export type admin_usersUpdateInput = {
   last_sign_in_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   current_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assets?: Prisma.assetsUpdateManyWithoutAdmin_usersNestedInput
   galleries?: Prisma.galleriesUpdateManyWithoutAdmin_usersNestedInput
   pages?: Prisma.pagesUpdateManyWithoutAdmin_usersNestedInput
 }
@@ -495,6 +501,7 @@ export type admin_usersUncheckedUpdateInput = {
   last_sign_in_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   current_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assets?: Prisma.assetsUncheckedUpdateManyWithoutAdmin_usersNestedInput
   galleries?: Prisma.galleriesUncheckedUpdateManyWithoutAdmin_usersNestedInput
   pages?: Prisma.pagesUncheckedUpdateManyWithoutAdmin_usersNestedInput
 }
@@ -644,6 +651,20 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type admin_usersCreateNestedOneWithoutAssetsInput = {
+  create?: Prisma.XOR<Prisma.admin_usersCreateWithoutAssetsInput, Prisma.admin_usersUncheckedCreateWithoutAssetsInput>
+  connectOrCreate?: Prisma.admin_usersCreateOrConnectWithoutAssetsInput
+  connect?: Prisma.admin_usersWhereUniqueInput
+}
+
+export type admin_usersUpdateOneRequiredWithoutAssetsNestedInput = {
+  create?: Prisma.XOR<Prisma.admin_usersCreateWithoutAssetsInput, Prisma.admin_usersUncheckedCreateWithoutAssetsInput>
+  connectOrCreate?: Prisma.admin_usersCreateOrConnectWithoutAssetsInput
+  upsert?: Prisma.admin_usersUpsertWithoutAssetsInput
+  connect?: Prisma.admin_usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.admin_usersUpdateToOneWithWhereWithoutAssetsInput, Prisma.admin_usersUpdateWithoutAssetsInput>, Prisma.admin_usersUncheckedUpdateWithoutAssetsInput>
+}
+
 export type admin_usersCreateNestedOneWithoutGalleriesInput = {
   create?: Prisma.XOR<Prisma.admin_usersCreateWithoutGalleriesInput, Prisma.admin_usersUncheckedCreateWithoutGalleriesInput>
   connectOrCreate?: Prisma.admin_usersCreateOrConnectWithoutGalleriesInput
@@ -672,6 +693,110 @@ export type admin_usersUpdateOneRequiredWithoutPagesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.admin_usersUpdateToOneWithWhereWithoutPagesInput, Prisma.admin_usersUpdateWithoutPagesInput>, Prisma.admin_usersUncheckedUpdateWithoutPagesInput>
 }
 
+export type admin_usersCreateWithoutAssetsInput = {
+  id?: bigint | number
+  first_name?: string | null
+  last_name?: string | null
+  acl?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  deleted_at?: Date | string | null
+  created_at: Date | string
+  updated_at: Date | string
+  email?: string
+  encrypted_password?: string
+  reset_password_token?: string | null
+  reset_password_sent_at?: Date | string | null
+  remember_created_at?: Date | string | null
+  sign_in_count?: number
+  current_sign_in_at?: Date | string | null
+  last_sign_in_at?: Date | string | null
+  current_sign_in_ip?: string | null
+  last_sign_in_ip?: string | null
+  galleries?: Prisma.galleriesCreateNestedManyWithoutAdmin_usersInput
+  pages?: Prisma.pagesCreateNestedManyWithoutAdmin_usersInput
+}
+
+export type admin_usersUncheckedCreateWithoutAssetsInput = {
+  id?: bigint | number
+  first_name?: string | null
+  last_name?: string | null
+  acl?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  deleted_at?: Date | string | null
+  created_at: Date | string
+  updated_at: Date | string
+  email?: string
+  encrypted_password?: string
+  reset_password_token?: string | null
+  reset_password_sent_at?: Date | string | null
+  remember_created_at?: Date | string | null
+  sign_in_count?: number
+  current_sign_in_at?: Date | string | null
+  last_sign_in_at?: Date | string | null
+  current_sign_in_ip?: string | null
+  last_sign_in_ip?: string | null
+  galleries?: Prisma.galleriesUncheckedCreateNestedManyWithoutAdmin_usersInput
+  pages?: Prisma.pagesUncheckedCreateNestedManyWithoutAdmin_usersInput
+}
+
+export type admin_usersCreateOrConnectWithoutAssetsInput = {
+  where: Prisma.admin_usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.admin_usersCreateWithoutAssetsInput, Prisma.admin_usersUncheckedCreateWithoutAssetsInput>
+}
+
+export type admin_usersUpsertWithoutAssetsInput = {
+  update: Prisma.XOR<Prisma.admin_usersUpdateWithoutAssetsInput, Prisma.admin_usersUncheckedUpdateWithoutAssetsInput>
+  create: Prisma.XOR<Prisma.admin_usersCreateWithoutAssetsInput, Prisma.admin_usersUncheckedCreateWithoutAssetsInput>
+  where?: Prisma.admin_usersWhereInput
+}
+
+export type admin_usersUpdateToOneWithWhereWithoutAssetsInput = {
+  where?: Prisma.admin_usersWhereInput
+  data: Prisma.XOR<Prisma.admin_usersUpdateWithoutAssetsInput, Prisma.admin_usersUncheckedUpdateWithoutAssetsInput>
+}
+
+export type admin_usersUpdateWithoutAssetsInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acl?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  encrypted_password?: Prisma.StringFieldUpdateOperationsInput | string
+  reset_password_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reset_password_sent_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  remember_created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sign_in_count?: Prisma.IntFieldUpdateOperationsInput | number
+  current_sign_in_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  last_sign_in_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  current_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  galleries?: Prisma.galleriesUpdateManyWithoutAdmin_usersNestedInput
+  pages?: Prisma.pagesUpdateManyWithoutAdmin_usersNestedInput
+}
+
+export type admin_usersUncheckedUpdateWithoutAssetsInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  first_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  acl?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  encrypted_password?: Prisma.StringFieldUpdateOperationsInput | string
+  reset_password_token?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reset_password_sent_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  remember_created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sign_in_count?: Prisma.IntFieldUpdateOperationsInput | number
+  current_sign_in_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  last_sign_in_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  current_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  last_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  galleries?: Prisma.galleriesUncheckedUpdateManyWithoutAdmin_usersNestedInput
+  pages?: Prisma.pagesUncheckedUpdateManyWithoutAdmin_usersNestedInput
+}
+
 export type admin_usersCreateWithoutGalleriesInput = {
   id?: bigint | number
   first_name?: string | null
@@ -690,6 +815,7 @@ export type admin_usersCreateWithoutGalleriesInput = {
   last_sign_in_at?: Date | string | null
   current_sign_in_ip?: string | null
   last_sign_in_ip?: string | null
+  assets?: Prisma.assetsCreateNestedManyWithoutAdmin_usersInput
   pages?: Prisma.pagesCreateNestedManyWithoutAdmin_usersInput
 }
 
@@ -711,6 +837,7 @@ export type admin_usersUncheckedCreateWithoutGalleriesInput = {
   last_sign_in_at?: Date | string | null
   current_sign_in_ip?: string | null
   last_sign_in_ip?: string | null
+  assets?: Prisma.assetsUncheckedCreateNestedManyWithoutAdmin_usersInput
   pages?: Prisma.pagesUncheckedCreateNestedManyWithoutAdmin_usersInput
 }
 
@@ -748,6 +875,7 @@ export type admin_usersUpdateWithoutGalleriesInput = {
   last_sign_in_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   current_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assets?: Prisma.assetsUpdateManyWithoutAdmin_usersNestedInput
   pages?: Prisma.pagesUpdateManyWithoutAdmin_usersNestedInput
 }
 
@@ -769,6 +897,7 @@ export type admin_usersUncheckedUpdateWithoutGalleriesInput = {
   last_sign_in_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   current_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assets?: Prisma.assetsUncheckedUpdateManyWithoutAdmin_usersNestedInput
   pages?: Prisma.pagesUncheckedUpdateManyWithoutAdmin_usersNestedInput
 }
 
@@ -790,6 +919,7 @@ export type admin_usersCreateWithoutPagesInput = {
   last_sign_in_at?: Date | string | null
   current_sign_in_ip?: string | null
   last_sign_in_ip?: string | null
+  assets?: Prisma.assetsCreateNestedManyWithoutAdmin_usersInput
   galleries?: Prisma.galleriesCreateNestedManyWithoutAdmin_usersInput
 }
 
@@ -811,6 +941,7 @@ export type admin_usersUncheckedCreateWithoutPagesInput = {
   last_sign_in_at?: Date | string | null
   current_sign_in_ip?: string | null
   last_sign_in_ip?: string | null
+  assets?: Prisma.assetsUncheckedCreateNestedManyWithoutAdmin_usersInput
   galleries?: Prisma.galleriesUncheckedCreateNestedManyWithoutAdmin_usersInput
 }
 
@@ -848,6 +979,7 @@ export type admin_usersUpdateWithoutPagesInput = {
   last_sign_in_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   current_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assets?: Prisma.assetsUpdateManyWithoutAdmin_usersNestedInput
   galleries?: Prisma.galleriesUpdateManyWithoutAdmin_usersNestedInput
 }
 
@@ -869,6 +1001,7 @@ export type admin_usersUncheckedUpdateWithoutPagesInput = {
   last_sign_in_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   current_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   last_sign_in_ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assets?: Prisma.assetsUncheckedUpdateManyWithoutAdmin_usersNestedInput
   galleries?: Prisma.galleriesUncheckedUpdateManyWithoutAdmin_usersNestedInput
 }
 
@@ -878,11 +1011,13 @@ export type admin_usersUncheckedUpdateWithoutPagesInput = {
  */
 
 export type Admin_usersCountOutputType = {
+  assets: number
   galleries: number
   pages: number
 }
 
 export type Admin_usersCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  assets?: boolean | Admin_usersCountOutputTypeCountAssetsArgs
   galleries?: boolean | Admin_usersCountOutputTypeCountGalleriesArgs
   pages?: boolean | Admin_usersCountOutputTypeCountPagesArgs
 }
@@ -895,6 +1030,13 @@ export type Admin_usersCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.
    * Select specific fields to fetch from the Admin_usersCountOutputType
    */
   select?: Prisma.Admin_usersCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * Admin_usersCountOutputType without action
+ */
+export type Admin_usersCountOutputTypeCountAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.assetsWhereInput
 }
 
 /**
@@ -930,6 +1072,7 @@ export type admin_usersSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   last_sign_in_at?: boolean
   current_sign_in_ip?: boolean
   last_sign_in_ip?: boolean
+  assets?: boolean | Prisma.admin_users$assetsArgs<ExtArgs>
   galleries?: boolean | Prisma.admin_users$galleriesArgs<ExtArgs>
   pages?: boolean | Prisma.admin_users$pagesArgs<ExtArgs>
   _count?: boolean | Prisma.Admin_usersCountOutputTypeDefaultArgs<ExtArgs>
@@ -997,6 +1140,7 @@ export type admin_usersSelectScalar = {
 
 export type admin_usersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "first_name" | "last_name" | "acl" | "deleted_at" | "created_at" | "updated_at" | "email" | "encrypted_password" | "reset_password_token" | "reset_password_sent_at" | "remember_created_at" | "sign_in_count" | "current_sign_in_at" | "last_sign_in_at" | "current_sign_in_ip" | "last_sign_in_ip", ExtArgs["result"]["admin_users"]>
 export type admin_usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  assets?: boolean | Prisma.admin_users$assetsArgs<ExtArgs>
   galleries?: boolean | Prisma.admin_users$galleriesArgs<ExtArgs>
   pages?: boolean | Prisma.admin_users$pagesArgs<ExtArgs>
   _count?: boolean | Prisma.Admin_usersCountOutputTypeDefaultArgs<ExtArgs>
@@ -1007,6 +1151,7 @@ export type admin_usersIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.
 export type $admin_usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "admin_users"
   objects: {
+    assets: Prisma.$assetsPayload<ExtArgs>[]
     galleries: Prisma.$galleriesPayload<ExtArgs>[]
     pages: Prisma.$pagesPayload<ExtArgs>[]
   }
@@ -1422,6 +1567,7 @@ readonly fields: admin_usersFieldRefs;
  */
 export interface Prisma__admin_usersClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  assets<T extends Prisma.admin_users$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.admin_users$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$assetsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   galleries<T extends Prisma.admin_users$galleriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.admin_users$galleriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$galleriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pages<T extends Prisma.admin_users$pagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.admin_users$pagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$pagesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1860,6 +2006,30 @@ export type admin_usersDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many admin_users to delete.
    */
   limit?: number
+}
+
+/**
+ * admin_users.assets
+ */
+export type admin_users$assetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the assets
+   */
+  select?: Prisma.assetsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the assets
+   */
+  omit?: Prisma.assetsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.assetsInclude<ExtArgs> | null
+  where?: Prisma.assetsWhereInput
+  orderBy?: Prisma.assetsOrderByWithRelationInput | Prisma.assetsOrderByWithRelationInput[]
+  cursor?: Prisma.assetsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AssetsScalarFieldEnum | Prisma.AssetsScalarFieldEnum[]
 }
 
 /**

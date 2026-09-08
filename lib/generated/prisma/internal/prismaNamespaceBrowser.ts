@@ -55,6 +55,7 @@ export const ModelName = {
   active_storage_blobs: 'active_storage_blobs',
   active_storage_variant_records: 'active_storage_variant_records',
   admin_users: 'admin_users',
+  assets: 'assets',
   contact_rate_limits: 'contact_rate_limits',
   galleries: 'galleries',
   gallery_items: 'gallery_items',
@@ -145,6 +146,23 @@ export const Admin_usersScalarFieldEnum = {
 } as const
 
 export type Admin_usersScalarFieldEnum = (typeof Admin_usersScalarFieldEnum)[keyof typeof Admin_usersScalarFieldEnum]
+
+
+export const AssetsScalarFieldEnum = {
+  id: 'id',
+  permalink: 'permalink',
+  permalink_base: 'permalink_base',
+  name: 'name',
+  admin_user_id: 'admin_user_id',
+  description: 'description',
+  mime_type: 'mime_type',
+  tags: 'tags',
+  state: 'state',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type AssetsScalarFieldEnum = (typeof AssetsScalarFieldEnum)[keyof typeof AssetsScalarFieldEnum]
 
 
 export const Contact_rate_limitsScalarFieldEnum = {

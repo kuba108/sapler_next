@@ -59,12 +59,32 @@ model admin_users {
   last_sign_in_at        DateTime?   @db.Timestamp(6)
   current_sign_in_ip     String?     @db.Inet
   last_sign_in_ip        String?     @db.Inet
+  assets                 assets[]
   galleries              galleries[]
   pages                  pages[]
 
   @@index([deleted_at], map: "index_admin_users_on_deleted_at")
   @@index([first_name], map: "index_admin_users_on_first_name")
   @@index([last_name], map: "index_admin_users_on_last_name")
+}
+
+model assets {
+  id             BigInt      @id @default(autoincrement())
+  permalink      String      @db.VarChar
+  permalink_base String      @db.VarChar
+  name           String      @db.VarChar
+  admin_user_id  BigInt
+  description    String?     @db.VarChar
+  mime_type      String      @db.VarChar
+  tags           String?     @db.VarChar
+  state          String      @default("visible") @db.VarChar
+  created_at     DateTime    @db.Timestamp(6)
+  updated_at     DateTime    @db.Timestamp(6)
+  admin_users    admin_users @relation(fields: [admin_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_rails_df79facc84")
+
+  @@index([admin_user_id], map: "index_assets_on_admin_user_id")
+  @@index([permalink_base], map: "index_assets_on_permalink_base")
+  @@index([tags], map: "index_assets_on_tags")
 }
 
 model contact_rate_limits {

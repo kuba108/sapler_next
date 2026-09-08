@@ -62,6 +62,11 @@ export type active_storage_variant_records = Prisma.active_storage_variant_recor
  */
 export type admin_users = Prisma.admin_usersModel
 /**
+ * Model assets
+ * 
+ */
+export type assets = Prisma.assetsModel
+/**
  * Model contact_rate_limits
  * 
  */
