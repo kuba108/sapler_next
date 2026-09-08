@@ -18,6 +18,10 @@ export default function Sidebar({ nav }: { nav: NavItem[] }) {
       data-color="blue"
       data-image="/assets/admin/sidebar-7.jpg"
     >
+      <div
+        className="sidebar-background"
+        style={{ backgroundImage: "url('/assets/admin/sidebar-7.jpg')" }}
+      />
       <div className="sidebar-wrapper">
         <div className="logo">
           <Link href="/admin" className="simple-text">
