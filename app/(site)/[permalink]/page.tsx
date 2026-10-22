@@ -5,7 +5,13 @@ import { appConfig } from '@/lib/app-config';
 import SiteShell from '@/components/site/SiteShell';
 import PageView from '@/components/site/PageView';
 
-export const dynamic = 'force-dynamic';
+// Served from the ISR cache; admin actions call revalidateSite() when content changes.
+export const revalidate = false;
+
+// Nothing is prerendered at build time; each permalink is rendered on its first visit and cached.
+export function generateStaticParams() {
+  return [];
+}
 
 type Props = { params: Promise<{ permalink: string }> };
 

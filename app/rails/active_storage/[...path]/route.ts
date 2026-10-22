@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
 import { blobIdFromSignedId } from '@/lib/active-storage';
-import { s3PublicUrl, s3SignedGetUrl } from '@/lib/s3';
+import { blobRedirect } from '@/lib/blob-redirect';
 
 /**
  * Active Storage compatible blob serving.
@@ -29,22 +28,6 @@ export async function GET(
     return NextResponse.json({ error: 'cannot decode blob id' }, { status: 404 });
   }
 
-  const blob = await prisma.active_storage_blobs.findUnique({
-    where: { id: BigInt(blobId) },
-  });
-  if (!blob) {
-    return NextResponse.json({ error: 'blob not found' }, { status: 404 });
-  }
-
-  // Prefer a presigned URL when the bucket is private; fall back to public URL.
-  let url: string;
-  try {
-    url = process.env.S3_PUBLIC === 'true'
-      ? s3PublicUrl(blob.key)
-      : await s3SignedGetUrl(blob.key);
-  } catch {
-    url = s3PublicUrl(blob.key);
-  }
-
-  return NextResponse.redirect(url, 302);
+  const res = await blobRedirect(blobId);
+  return res ?? NextResponse.json({ error: 'blob not found' }, { status: 404 });
 }

@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { requirePolicy } from '@/lib/admin-auth';
+import { revalidateSite } from '@/lib/site-cache';
 
 export async function saveSetting(
   name: string,
@@ -29,6 +30,7 @@ export async function saveSetting(
       });
     }
     revalidatePath('/admin/settings');
+    revalidateSite();
     return { ok: true, msg: 'Nastavení bylo uloženo.' };
   } catch {
     return { ok: false, msg: 'Nastavení nebylo uloženo.' };
@@ -42,6 +44,7 @@ export async function setHomePage(pageId: string): Promise<{ ok: boolean; msg: s
     await prisma.pages.update({ where: { id }, data: { home_page: true } });
     await prisma.pages.updateMany({ where: { id: { not: id } }, data: { home_page: false } });
     revalidatePath('/admin/settings');
+    revalidateSite();
     return { ok: true, msg: 'Úvodní stránka byla nastavena.' };
   } catch {
     return { ok: false, msg: 'Nastavení nebylo uloženo.' };

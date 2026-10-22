@@ -9,6 +9,7 @@ import { parameterize } from '@/lib/page-constants';
 import { defaultWidgetJson } from '@/lib/widgets';
 import { publishPageContent } from '@/lib/content-render';
 import { attachOne } from '@/lib/media';
+import { revalidateSite } from '@/lib/site-cache';
 
 /* ----------------------------- Page CRUD ----------------------------- */
 
@@ -53,6 +54,7 @@ export async function createPage(_prev: CreatePageState, formData: FormData): Pr
   }
 
   revalidatePath('/admin/pages');
+  revalidateSite();
   redirect('/admin/pages');
 }
 
@@ -139,6 +141,7 @@ export async function updatePageSettings(id: string, formData: FormData) {
   }
   await prisma.pages.update({ where: { id: BigInt(id) }, data });
   revalidatePath(`/admin/pages/${id}`);
+  revalidateSite();
 }
 
 const EDITABLE_PAGE_FIELDS = new Set([
@@ -162,6 +165,7 @@ export async function updatePageField(id: string, field: string, value: string) 
       data: { [field]: value, updated_at: new Date() },
     });
     revalidatePath(`/admin/pages/${id}`);
+    revalidateSite();
     return { ok: true };
   } catch {
     return { ok: false, msg: 'Stránku se nepodařilo uložit.' };
@@ -185,6 +189,7 @@ export async function deletePage(id: string): Promise<{ ok: boolean; msg?: strin
     await prisma.routes.deleteMany({ where: { routable_type: 'Page', routable_id: Number(pid) } });
     await prisma.pages.delete({ where: { id: pid } });
     revalidatePath('/admin/pages');
+    revalidateSite();
     return { ok: true };
   } catch {
     return { ok: false, msg: 'Stránka nebyla smazána.' };
@@ -240,6 +245,7 @@ export async function changeRoute(routeId: string, newPermalinkRaw: string) {
   });
 
   revalidatePath(`/admin/pages/${route.routable_id}`);
+  revalidateSite();
   return { ok: true };
 }
 
@@ -444,6 +450,7 @@ export async function publishPage(pageId: string): Promise<{ ok: boolean; msg: s
     await requirePolicy('page', 'update');
     await publishPageContent(BigInt(pageId));
     revalidatePath(`/admin/pages/${pageId}`);
+    revalidateSite();
     return { ok: true, msg: 'Změny na stránce byly uloženy :)' };
   } catch {
     return { ok: false, msg: 'Změny na stránce nebyly uloženy.' };

@@ -5,7 +5,8 @@ import { appConfig } from '@/lib/app-config';
 import SiteShell from '@/components/site/SiteShell';
 import PageView from '@/components/site/PageView';
 
-export const dynamic = 'force-dynamic';
+// Served from the ISR cache; admin actions call revalidateSite() when content changes.
+export const revalidate = false;
 
 export async function generateMetadata(): Promise<Metadata> {
   const res = await resolveRoute();

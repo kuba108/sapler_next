@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { requirePolicy } from '@/lib/admin-auth';
 import { cacheMenuHtml } from '@/lib/menu-html';
+import { revalidateSite } from '@/lib/site-cache';
 
 export type CreateMenuState = { error?: string };
 
@@ -39,6 +40,8 @@ export async function createMenu(_prev: CreateMenuState, formData: FormData): Pr
   }
 
   revalidatePath('/admin/menus');
+
+  revalidateSite();
   redirect('/admin/menus');
 }
 
@@ -109,6 +112,7 @@ export async function deleteMenu(id: string): Promise<{ ok: boolean; msg?: strin
     await prisma.menu_items.deleteMany({ where: { menu_id: BigInt(id) } });
     await prisma.menus.delete({ where: { id: BigInt(id) } });
     revalidatePath('/admin/menus');
+    revalidateSite();
     return { ok: true };
   } catch {
     return { ok: false, msg: 'Menu nebylo smazáno.' };
@@ -159,6 +163,7 @@ export async function createMenuItem(menuId: string, formData: FormData) {
   });
   await cacheMenuHtml(mId);
   revalidatePath(`/admin/menus/${menuId}`);
+  revalidateSite();
   return { ok: true };
 }
 
@@ -189,6 +194,7 @@ export async function updateMenuItem(itemId: string, formData: FormData) {
   await prisma.menu_items.update({ where: { id: item.id }, data });
   if (item.menu_id) await cacheMenuHtml(item.menu_id);
   revalidatePath(`/admin/menus/${item.menu_id}`);
+  revalidateSite();
   return { ok: true };
 }
 
@@ -202,6 +208,7 @@ export async function deleteMenuItem(itemId: string): Promise<{ ok: boolean; msg
     await prisma.menu_items.delete({ where: { id: item.id } });
     if (item.menu_id) await cacheMenuHtml(item.menu_id);
     revalidatePath(`/admin/menus/${item.menu_id}`);
+    revalidateSite();
     return { ok: true };
   } catch {
     return { ok: false, msg: 'Položka nebyla smazána.' };
@@ -230,5 +237,6 @@ export async function saveMenuOrder(
   }
   await cacheMenuHtml(BigInt(menuId));
   revalidatePath(`/admin/menus/${menuId}`);
+  revalidateSite();
   return { ok: true };
 }
