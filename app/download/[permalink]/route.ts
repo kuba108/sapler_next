@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { firstAttachmentBlobId, mediaUrl } from '@/lib/media';
+import { firstAttachmentBlobId } from '@/lib/media';
+import { s3SignedDownloadUrl } from '@/lib/s3';
 
 /** Public download link for a Media/Asset file, ported from Rails' /download/:permalink. */
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   ctx: { params: Promise<{ permalink: string }> },
 ) {
   const { permalink } = await ctx.params;
@@ -14,5 +15,20 @@ export async function GET(
   const blobId = await firstAttachmentBlobId('Asset', asset.id, 'file');
   if (!blobId) return NextResponse.json({ error: 'not found' }, { status: 404 });
 
-  return NextResponse.redirect(new URL(mediaUrl(blobId), req.url));
+  const blob = await prisma.active_storage_blobs.findUnique({
+    where: { id: blobId },
+    select: { key: true, filename: true },
+  });
+  if (!blob) return NextResponse.json({ error: 'not found' }, { status: 404 });
+
+  let url: string;
+  try {
+    url = await s3SignedDownloadUrl(blob.key, blob.filename);
+  } catch {
+    return NextResponse.json({ error: 'download unavailable' }, { status: 503 });
+  }
+
+  const response = NextResponse.redirect(url, 302);
+  response.headers.set('Cache-Control', 'private, no-store');
+  return response;
 }

@@ -48,6 +48,38 @@ export function s3SignedGetUrl(key: string, expiresIn = 300): Promise<string> {
 }
 
 /**
+ * Presigned GET URL that makes the browser download the object under its
+ * original Active Storage filename instead of the opaque S3 object key.
+ */
+export function s3SignedDownloadUrl(
+  key: string,
+  filename: string,
+  expiresIn = 300,
+): Promise<string> {
+  const fallbackFilename = filename
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\x20-\x7e]/g, '_')
+    .replace(/["\\]/g, '_');
+  const encodedFilename = encodeURIComponent(filename).replace(
+    /['()*]/g,
+    (character) => `%${character.charCodeAt(0).toString(16).toUpperCase()}`,
+  );
+  const contentDisposition =
+    `attachment; filename="${fallbackFilename}"; filename*=UTF-8''${encodedFilename}`;
+
+  return getSignedUrl(
+    s3(),
+    new GetObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      ResponseContentDisposition: contentDisposition,
+    }),
+    { expiresIn },
+  );
+}
+
+/**
  * Generates an Active Storage compatible object key: 28 base58-ish chars.
  * Rails uses `SecureRandom.base58(28)`; we approximate with a URL-safe alphabet.
  */
